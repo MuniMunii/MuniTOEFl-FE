@@ -5,6 +5,7 @@ import NotFound from './pages/NotFound'
 import Navbar from './components/fragments/Navbar'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
+import Dashboard from './pages/dashboard/dashboard';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/register" element={<Register />} />
+        <Route path="/dashboard/:username" element={<Dashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </main>
