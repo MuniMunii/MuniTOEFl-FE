@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
-import { useSession } from "@/hooks/useSession";
-
+import SignoutAndSignin from "./signoutAndSigninButton";
 export default function Navbar() {
-  const { data: session } = useSession();
+
   return (
     <nav className="flex items-center justify-between bg-gray-100 p-4 shadow">
       <h1 className="text-xl font-bold">TOEFL FE</h1>
@@ -11,9 +10,7 @@ export default function Navbar() {
         <Link to="/" className="hover:underline">
           Home
         </Link>
-        <Button variant={"default"}>
-          {session?<Link to={"/auth/login"}>Sign-Out</Link>:<Link to={"/auth/login"}>Sign-in</Link>}
-        </Button>
+        <SignoutAndSignin/>
       </div>
     </nav>
   );

@@ -32,23 +32,24 @@ const LoginScheme = z.object({
 type LoginType = z.infer<typeof LoginScheme>;
 // main component
 const Login = () => {
-const { data: session, isLoading, error } = useSession();
+const { data: session } = useSession();
   useEffect(()=>{console.log(session)},[session])
   const navigate=useNavigate()
   const form = useForm<LoginType>({
     resolver: zodResolver(LoginScheme),
     defaultValues: { Email: "", Password: "" },
   });
-  const loginMutate = useMutate<any, { email: string; password: string,csrfToken:string|undefined }>(
+  const loginMutate = useMutate<any, { email: string; password: string,csrfToken:string|undefined,redirect:boolean,callbackUrl:string }>(
     {
-      url: "/auth/callback/credentials?json=true",
+      url: "/auth/callback/credentials?json=true&redirect=false",
       method: "POST",
       // isHeaderJSON:false,
       options:{
         onSuccess:(data)=>{
+          navigate('/dashboard')
           console.log('Login Successfull',data)
-          navigate(`/dashboard/${data.data.username}`)
-        }
+        },
+        onError:(err)=>{console.log(err)}
       }
     }
   );
@@ -61,6 +62,8 @@ async function onsubmit(value: LoginType) {
     loginMutate.mutate({
       email: value.Email,
       password: value.Password,
+      redirect:false,
+      callbackUrl:'/user/dashboard',
       csrfToken,
     });
   } catch (err) {

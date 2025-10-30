@@ -1,4 +1,5 @@
 import { apiClient } from "@/api/axiosClient";
+import type { UserType } from "@/schemas/user";
 import { useQuery } from "@tanstack/react-query";
 
 export function useSession() {
@@ -6,7 +7,7 @@ export function useSession() {
     queryKey: ["getSession"],
     queryFn: async () => {
       const res = await apiClient.get("/user/session", { withCredentials: true });
-      return res.data;
+      return res.data?.data?.user as UserType;
     },
     staleTime: 1000 * 60 * 5,
   });
