@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import { Button } from "../ui/button";
-import SignoutAndSignin from "./signoutAndSigninButton";
+import {SignoutAndSignin} from "./signoutAndSigninButton";
 export default function Navbar() {
 
   return (

@@ -21,7 +21,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { PasswordInput } from "@/components/ui/password-input";
-import { useMutate } from "@/hooks/useMutation";
+import { authClient } from "@/lib/authClient";
+import { GoogleSigninButton } from "@/components/fragments/signoutAndSigninButton";
 const RegisterScheme = z
   .object({
     Username: z
@@ -60,26 +61,18 @@ const Register = () => {
       ConfirmPassword: "",
     },
   });
-  const registerMutate=useMutate<RegisterType,{username:string,email:string,password:string,noTelp:string}>({
-    url:'/user/create-user',
-    method:'POST',
-    options:{
-      onSuccess:(data)=>{
-        console.log('Success register',data)
-        navigate('/auth/login')
-      },
-      onError:()=>{
-        console.log('Error register')
-      }
-    }
-  })
-  function onsubmit(value:RegisterType) {
+  async function onsubmit(value:RegisterType) {
     console.log(value)
-    // const csrfToken=useFetch({queryKey:['csrfToken'],url:'/auth/csrf'})
-    // console.log(csrfToken)
-    return registerMutate.mutate({
-      username:value.Username,email:value.Email,password:value.Password,noTelp:value.noTelp
+    const {data,error}=await authClient.signUp.email({
+      name:value.Username,
+      email:value.Email,
+      password:value.Password,
+      image:'',
+      noTelp:value.noTelp,
+      callbackURL:'http://localhost:5173/auth/login'
     })
+    if(error){console.log(error)}
+    if(data){navigate('/auth/login')}
   }
   return (
     <div className="bg-[#0B1FD1] w-full min-h-screen flex flex-col justify-center items-center p-6">
@@ -187,13 +180,7 @@ const Register = () => {
                 <span className="mx-2 text-gray-500 text-sm">atau</span>
                 <div className="grow border-t border-gray-300"></div>
               </CardDescription>
-              <Button
-                variant={"outline"}
-                className="flex flex-row gap-2 items-center justify-center"
-              >
-                <img src="/google.jpg" alt="" className="w-6 h-auto" />
-                <h4>Google</h4>
-              </Button>
+              <GoogleSigninButton/>
             </CardContent>
             <CardFooter className="justify-center">
               <div className="flex flex-row gap-2 text-sm">

@@ -1,41 +1,46 @@
-import { useSession } from "@/hooks/useSession";
-import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { useMutate } from "@/hooks/useMutation";
-import { apiClient } from "@/api/axiosClient";
+import { authClient } from "@/lib/authClient";
 
-export default function SignoutAndSignin() {
-  const { data: session } = useSession();
+export function SignoutAndSignin() {
+  const { data: session } = authClient.useSession();
+
   const navigate = useNavigate();
-  const signOutMutate = useMutate<{ csrfToken: string }>({
-    url: "/auth/signout",
-    method: "POST",
-    options: {
-      onSuccess: () => {
-        navigate("/auth/login");
-      },
-    },
-  });
   async function signOut() {
-    try {
-      // get csrftoken first
-      const res = await apiClient.get("/auth/csrf");
-      const csrfToken = res.data?.csrfToken;
-      signOutMutate.mutate({
-        csrfToken,
-      });
-    } catch (err) {
-      console.error("Failed to get CSRF token:", err);
-    }
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          navigate("/auth/login");
+        },
+      },
+    });
   }
   return session ? (
     <Button variant={"default"} onClick={signOut}>
-      <Link to={"/auth/login"}>Sign-Out</Link>
+      Sign-Out
     </Button>
   ) : (
     <Button variant={"default"}>
       <Link to={"/auth/login"}>Sign-in</Link>
+    </Button>
+  );
+}
+export function GoogleSigninButton() {
+  async function googleSignin() {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "http://localhost:5173/dashboard",
+      errorCallbackURL: "/error",
+    });
+  }
+  return (
+    <Button
+      variant={"outline"}
+      className="flex flex-row gap-2 items-center"
+      onClick={googleSignin}
+    >
+      <img src="/google.jpg" alt="" className="w-8 h-auto" />
+      <h4>Google</h4>
     </Button>
   );
 }

@@ -1,13 +1,19 @@
-import {useSession} from "@/hooks/useSession"
+
+import { authClient } from "@/lib/authClient";
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard (){
-const { data: session, isLoading, error } = useSession();
+ const { 
+        data: session, 
+        isPending,
+        error,
+    } = authClient.useSession()
     useEffect(()=>{console.log(session)},[session])
+
     const navigate=useNavigate()
-    if(isLoading){return <div>Loading</div>}
-    if(error){return navigate('/auth/login')}
+    if(isPending){return <div>Loading</div>}
+    if(error||!session){navigate('/auth/login')}
     return (
     <div className="flex items-center justify-center h-screen font-bold">
         Dashboard

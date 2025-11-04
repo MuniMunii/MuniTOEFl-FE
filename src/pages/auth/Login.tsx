@@ -21,10 +21,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PasswordInput } from "@/components/ui/password-input";
-import { useMutate } from "@/hooks/useMutation";
-import { apiClient } from "@/api/axiosClient";
-import { useEffect } from "react";
-import {useSession} from "@/hooks/useSession";
+import { authClient } from "@/lib/authClient";
+import { GoogleSigninButton } from "@/components/fragments/signoutAndSigninButton";
 const LoginScheme = z.object({
   Email: z.email(),
   Password: z.string(),
@@ -32,44 +30,22 @@ const LoginScheme = z.object({
 type LoginType = z.infer<typeof LoginScheme>;
 // main component
 const Login = () => {
-const { data: session } = useSession();
-  useEffect(()=>{console.log(session)},[session])
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const form = useForm<LoginType>({
     resolver: zodResolver(LoginScheme),
     defaultValues: { Email: "", Password: "" },
   });
-  const loginMutate = useMutate<any, { email: string; password: string,csrfToken:string|undefined,redirect:boolean,callbackUrl:string }>(
-    {
-      url: "/auth/callback/credentials?json=true&redirect=false",
-      method: "POST",
-      // isHeaderJSON:false,
-      options:{
-        onSuccess:(data)=>{
-          navigate('/dashboard')
-          console.log('Login Successfull',data)
-        },
-        onError:(err)=>{console.log(err)}
-      }
-    }
-  );
-async function onsubmit(value: LoginType) {
-  try {
-    // get csrftoken first
-    const res = await apiClient.get('/auth/csrf');
-    const csrfToken = res.data?.csrfToken;
-    console.log(csrfToken)
-    loginMutate.mutate({
-      email: value.Email,
-      password: value.Password,
-      redirect:false,
-      callbackUrl:'/user/dashboard',
-      csrfToken,
-    });
-  } catch (err) {
-    console.error('Failed to get CSRF token:', err);
+  async function onsubmit(value: LoginType) {
+      const { data, error } = await authClient.signIn.email({
+        email: value.Email,
+        password: value.Password,
+        callbackURL: "http://localhost:5173/dashboard",
+        rememberMe: true,
+      });
+      if(error){console.log(error)}
+      // if(data){navigate('/dashboard')}
   }
-}
+
   return (
     <div className="bg-[#0B1FD1] w-full min-h-screen flex items-center justify-center overflow-x-hidden p-6">
       <div className="flex flex-col lg:flex-row gap-10 justify-center items-center w-full max-w-7xl">
@@ -98,7 +74,10 @@ async function onsubmit(value: LoginType) {
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onsubmit)} className="flex flex-col gap-4">
+                <form
+                  onSubmit={form.handleSubmit(onsubmit)}
+                  className="flex flex-col gap-4"
+                >
                   <FormField
                     control={form.control}
                     name="Email"
@@ -138,13 +117,7 @@ async function onsubmit(value: LoginType) {
                 <span className="mx-2 text-gray-500 text-sm">atau</span>
                 <div className="grow border-t border-gray-300"></div>
               </CardDescription>
-              <Button
-                variant={"outline"}
-                className="flex flex-row gap-2 items-center"
-              >
-                <img src="/google.jpg" alt="" className="w-8 h-auto" />
-                <h4>Google</h4>
-              </Button>
+              <GoogleSigninButton/>
             </CardContent>
             <CardFooter className="flex justify-center">
               <div className="flex flex-row gap-2 text-sm">
