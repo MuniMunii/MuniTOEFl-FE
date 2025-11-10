@@ -1,22 +1,59 @@
-
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/fragments/dashboard/Sidebar/Sidebar";
 import { authClient } from "@/lib/authClient";
-import { useEffect } from "react"
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
+import ChartAttempt from "@/components/fragments/dashboard/chart/chart";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-export default function Dashboard (){
- const { 
-        data: session, 
-        isPending,
-        error,
-    } = authClient.useSession()
-    useEffect(()=>{console.log(session)},[session])
-
-    const navigate=useNavigate()
-    if(isPending){return <div>Loading</div>}
-    if(error||!session){navigate('/auth/login')}
-    return (
-    <div className="flex items-center justify-center h-screen font-bold">
-        Dashboard
-    </div>
-  )
+export default function Dashboard() {
+  const { data: session, isPending, error } = authClient.useSession();
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
+  const isMobile = useIsMobile();
+  const navigate = useNavigate();
+  if (isPending) {
+    return <div>Loading</div>;
+  }
+  if (error || !session) {
+    navigate("/auth/login");
+  }
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <div className="size-full min-h-screen flex">
+        {isMobile && <SidebarTrigger />}
+        <div className="size-full min-h-screen p-2 max-md:border-l max-md:border-l-gray-400 flex justify-center items-start">
+          <div className="w-[95%] bg-white px-2 flex flex-col">
+            {/* Main Chart Content */}
+            <Card className="bg-teal-200">
+              <CardContent className="flex max-md:flex-col gap-2">
+                {/* Card description */}
+                <Card className="p-4 border-none shadow-none">
+                  <CardContent>
+                    <h2 className="text-2xl font-semibold">Full Test</h2>
+                    <p className="text-gray-500">Complete simulation of the TOEFL IBT test with all sections</p>
+                  </CardContent>
+                  <CardFooter className="mt-auto">
+                    <Button className="w-full font-semibold">Take a full test</Button>
+                  </CardFooter>
+                </Card>
+                {/* Card Chart */}
+                <ChartAttempt />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </SidebarProvider>
+  );
 }
