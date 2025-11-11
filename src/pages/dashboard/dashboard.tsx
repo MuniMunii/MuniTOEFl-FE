@@ -22,12 +22,12 @@ export default function Dashboard() {
   }, [session]);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  // if (isPending) {
-  //   return <div>Loading</div>;
-  // }
-  // if (error || !session) {
-  //   navigate("/auth/login");
-  // }
+  if (isPending) {
+    return <div>Loading</div>;
+  }
+  if (error || !session) {
+    navigate("/auth/login");
+  }
   return (
     <SidebarProvider>
       <AppSidebar />
