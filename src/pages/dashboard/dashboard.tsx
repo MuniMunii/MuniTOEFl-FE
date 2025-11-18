@@ -8,11 +8,10 @@ import ChartAttempt from "@/components/fragments/dashboard/chart/chart";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import ProtectedPage from "@/components/HOC/protectedPage";
 
 export default function Dashboard() {
   const { data: session, isPending, error } = authClient.useSession();
@@ -20,14 +19,8 @@ export default function Dashboard() {
     console.log(session);
   }, [session]);
   const isMobile = useIsMobile();
-  const navigate = useNavigate();
-  if (isPending) {
-    return <div>Loading</div>;
-  }
-  if (error || !session) {
-    navigate("/auth/login");
-  }
   return (
+    <ProtectedPage>
     <SidebarProvider>
       <AppSidebar />
       <div className="size-full min-h-screen flex">
@@ -55,5 +48,6 @@ export default function Dashboard() {
         </div>
       </div>
     </SidebarProvider>
+    </ProtectedPage>
   );
 }

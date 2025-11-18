@@ -3,7 +3,6 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -34,7 +33,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 const gradesTotal=chartData.reduce((sum,item)=>sum+item.grade,0)
-const gradesAverage=gradesTotal/chartData.length
+const gradesAverage=14784/gradesTotal
 const gradesMax=Math.max(...chartData.map((item) => item.grade))
   return (
     <Card className="size-fit w-full overflow-x-auto shadow-none">
