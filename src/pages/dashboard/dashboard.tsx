@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ChartAttempt from "@/components/fragments/dashboard/chart/chart";
+import TopBanner from "@/components/fragments/dashboard/banner/banner";
 import {
   Card,
   CardContent,
@@ -27,6 +28,7 @@ export default function Dashboard() {
         {isMobile && <SidebarTrigger />}
         <div className="size-full min-h-screen p-2 max-md:border-l max-md:border-l-gray-400 flex justify-center items-start">
           <div className="w-[95%] bg-white px-2 flex flex-col">
+            <TopBanner/>
             {/* Main Chart Content */}
             <Card className="bg-teal-200">
               <CardContent className="flex max-md:flex-col gap-2">
