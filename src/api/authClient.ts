@@ -1,7 +1,7 @@
 import { createAuthClient } from "better-auth/react"
-import { inferAdditionalFields } from "better-auth/client/plugins";
+import { adminClient, inferAdditionalFields } from "better-auth/client/plugins";
 export const authClient=createAuthClient({
-    plugins:[inferAdditionalFields({user:{noTelp:{type:"string"}}})],
+    plugins:[inferAdditionalFields({user:{noTelp:{type:"string"},role:{type:'string'}}}),adminClient()],
     baseURL:"http://localhost:3000",
 })
 /**

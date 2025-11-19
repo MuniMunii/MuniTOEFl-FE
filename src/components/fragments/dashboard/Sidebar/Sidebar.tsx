@@ -11,8 +11,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { NavUser } from "./Nav-user"
-import { authClient } from "@/lib/authClient"
+import { NavUser } from "../../Nav-user"
+import { authClient } from "@/api/authClient"
 
 const items = [
   {
@@ -69,7 +69,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser name={session?.user?.name} email={session?.user?.email} image={session?.user?.image??undefined}/>
+        <NavUser name={session?.user?.name} email={session?.user?.email} image={session?.user?.image??undefined} role={session?.user.role}/>
       </SidebarFooter>
     </Sidebar>
   )

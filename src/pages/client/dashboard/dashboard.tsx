@@ -1,8 +1,7 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/fragments/dashboard/Sidebar/Sidebar";
-import { authClient } from "@/lib/authClient";
+import { authClient } from "@/api/authClient";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ChartAttempt from "@/components/fragments/dashboard/chart/chart";
 import TopBanner from "@/components/fragments/dashboard/banner/banner";
@@ -12,22 +11,21 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import ProtectedPage from "@/components/HOC/protectedPage";
+import LessonCard from "@/components/fragments/dashboard/card/lessonCard";
 
 export default function Dashboard() {
-  const { data: session, isPending, error } = authClient.useSession();
+  const { data: session } = authClient.useSession();
   useEffect(() => {
     console.log(session);
   }, [session]);
   const isMobile = useIsMobile();
   return (
-    <ProtectedPage>
     <SidebarProvider>
       <AppSidebar />
       <div className="size-full min-h-screen flex">
         {isMobile && <SidebarTrigger />}
         <div className="size-full min-h-screen p-2 max-md:border-l max-md:border-l-gray-400 flex justify-center items-start">
-          <div className="w-[95%] bg-white px-2 flex flex-col">
+          <div className="w-[95%] bg-white px-2 flex flex-col gap-4">
             <TopBanner/>
             {/* Main Chart Content */}
             <Card className="bg-teal-200">
@@ -46,10 +44,11 @@ export default function Dashboard() {
                 <ChartAttempt />
               </CardContent>
             </Card>
+            {/* Lesson card component */}
+            <LessonCard/>
           </div>
         </div>
       </div>
     </SidebarProvider>
-    </ProtectedPage>
   );
 }

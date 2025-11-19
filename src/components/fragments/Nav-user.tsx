@@ -25,10 +25,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { authClient } from "@/lib/authClient"
+import { authClient } from "@/api/authClient"
 
 
-export function NavUser({name,image,email}:{name:string|undefined,image:string|undefined,email:string|undefined}) {
+export function NavUser({name,image,email,role}:{name:string|undefined,image:string|undefined,email:string|undefined,role:string|undefined|null}) {
   const { isMobile } = useSidebar()
 
   return (
@@ -66,7 +66,7 @@ export function NavUser({name,image,email}:{name:string|undefined,image:string|u
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{name}</span>
                   <span className="truncate text-xs">{email}</span>
-                  <span className="truncate text-xs text-blue-400">Student</span>
+                  <span className="truncate text-xs text-blue-400">{role==='user'?'Student':'Admin'}</span>
                 </div>
               </div>
             </DropdownMenuLabel>

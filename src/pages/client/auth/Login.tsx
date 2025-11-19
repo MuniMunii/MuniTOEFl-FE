@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Form,
   FormField,
@@ -21,7 +21,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PasswordInput } from "@/components/ui/password-input";
-import { authClient } from "@/lib/authClient";
+import { authClient } from "@/api/authClient";
 import { GoogleSigninButton } from "@/components/fragments/signoutAndSigninButton";
 const LoginScheme = z.object({
   Email: z.email(),
@@ -30,16 +30,15 @@ const LoginScheme = z.object({
 type LoginType = z.infer<typeof LoginScheme>;
 // main component
 const Login = () => {
-  const navigate = useNavigate();
   const form = useForm<LoginType>({
     resolver: zodResolver(LoginScheme),
     defaultValues: { Email: "", Password: "" },
   });
   async function onsubmit(value: LoginType) {
-      const { data, error } = await authClient.signIn.email({
+      const { error } = await authClient.signIn.email({
         email: value.Email,
         password: value.Password,
-        callbackURL: "http://localhost:5173/dashboard",
+        callbackURL: "http://localhost:5173/role-redirect",
         rememberMe: true,
       });
       if(error){console.log(error)}

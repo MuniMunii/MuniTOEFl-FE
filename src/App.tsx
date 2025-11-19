@@ -1,25 +1,43 @@
 "use client";
-import { Route, Routes} from 'react-router-dom'
-import Homepage from './pages/Homepage'
-import NotFound from './pages/NotFound'
-import Login from './pages/auth/Login'
-import Register from './pages/auth/Register'
-import Dashboard from './pages/dashboard/dashboard';
+import { Route, Routes } from "react-router-dom";
+import Homepage from "./pages/Homepage";
+import NotFound from "./pages/NotFound";
+import Login from "./pages/client/auth/Login";
+import Register from "./pages/client/auth/Register";
+import Dashboard from "./pages/client/dashboard/dashboard";
+import ProtectedLayout from "./components/HOC/protectedPage";
+import AdminDashboard from "./pages/admin/dashboard/adminDashboard";
+import AddUser from "./pages/admin/dashboard/addAdmin";
+import AddCourse from "./pages/admin/dashboard/addCourse";
+import VoucherPage from "./pages/admin/dashboard/addVoucher";
+import { Toaster } from "sonner";
 
 function App() {
   return (
     <div>
-    <main>
-      <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/register" element={<Register />} />
-        <Route path="/dashboard/" element={<Dashboard />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </main>
+      <main>
+        <Toaster />
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/register" element={<Register />} />
+          <Route element={<ProtectedLayout allowedRoles={["user"]} />}>
+            <Route path="/dashboard/" element={<Dashboard />} />
+          </Route>
+          <Route element={<ProtectedLayout allowedRoles={["admin"]} />}>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/admin-dashboard/voucher" element={<VoucherPage />} />
+            <Route path="/admin-dashboard/add-admin" element={<AddUser />} />
+            <Route path="/admin-dashboard/add-course" element={<AddCourse />} />
+          </Route>
+          <Route element={<ProtectedLayout allowedRoles={null} />}>
+            <Route path="/role-redirect" element={<div></div>} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

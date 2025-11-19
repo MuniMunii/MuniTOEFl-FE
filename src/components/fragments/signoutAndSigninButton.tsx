@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { authClient } from "@/lib/authClient";
+import { authClient } from "@/api/authClient";
 
 export function SignoutAndSignin() {
   const { data: session } = authClient.useSession();

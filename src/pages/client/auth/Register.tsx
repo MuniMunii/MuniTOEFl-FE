@@ -21,7 +21,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { PasswordInput } from "@/components/ui/password-input";
-import { authClient } from "@/lib/authClient";
+import { authClient } from "@/api/authClient";
 import { GoogleSigninButton } from "@/components/fragments/signoutAndSigninButton";
 const RegisterScheme = z
   .object({
