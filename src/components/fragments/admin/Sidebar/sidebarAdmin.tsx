@@ -44,8 +44,7 @@ const items = [
     title: "Users",
     icon: UserPlus,
     children: [
-      { title: "Add Admin", url: "/admin-dashboard/add-admin" },
-      { title: "All Users", url: "/admin-dashboard/list-users" },
+      { title: "User Managements", url: "/admin-dashboard/list-users" },
     ],
   },
 ];
