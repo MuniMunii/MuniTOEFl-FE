@@ -1,12 +1,13 @@
 
 import { authClient } from "@/api/authClient";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import LoadingComponent from "../fragments/loading";
 
 export default function ProtectedLayout({ allowedRoles }:{allowedRoles:string[]|null|undefined}) {
   const { data: session, isPending, error } = authClient.useSession();
   const location = useLocation();
 
-  if (isPending) return <div>Loading...</div>;
+  if (isPending) return <LoadingComponent/>;
   if (error || !session) 
     return <Navigate to="/auth/login" replace state={{ from: location }} />;
   if (location.pathname === "/role-redirect") {

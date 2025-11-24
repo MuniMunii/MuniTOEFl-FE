@@ -11,6 +11,7 @@ import UsersManagementPage from "./pages/admin/dashboard/UserManagement";
 import AddCourse from "./pages/admin/dashboard/addCourse";
 import VoucherPage from "./pages/admin/dashboard/Voucher";
 import { Toaster } from "sonner";
+import LessonPage from "./pages/client/dashboard/lesson";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/auth/register" element={<Register />} />
           <Route element={<ProtectedLayout allowedRoles={["user"]} />}>
             <Route path="/dashboard/" element={<Dashboard />} />
+            <Route path="/dashboard/lesson" element={<LessonPage />} />
           </Route>
           <Route element={<ProtectedLayout allowedRoles={["admin"]} />}>
             <Route path="/admin-dashboard" element={<AdminDashboard />} />

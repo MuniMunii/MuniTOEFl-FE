@@ -1,17 +1,17 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/fragments/dashboard/Sidebar/Sidebar";
+import { AppSidebar } from "@/components/fragments/client/dashboard/Sidebar/Sidebar";
 import { authClient } from "@/api/authClient";
 import { useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import ChartAttempt from "@/components/fragments/dashboard/chart/chart";
-import TopBanner from "@/components/fragments/dashboard/banner/banner";
+import ChartAttempt from "@/components/fragments/client/dashboard/chart/chart";
+import TopBanner from "@/components/fragments/client/dashboard/banner/banner";
 import {
   Card,
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import LessonCard from "@/components/fragments/dashboard/card/lessonCard";
+import LessonCard from "@/components/fragments/client/dashboard/card/lessonCard";
 
 export default function Dashboard() {
   const { data: session } = authClient.useSession();
