@@ -17,6 +17,10 @@ export function useMutate<TData, TVariables = unknown>({
     mutationFn: async (variables: TVariables) => {
       let dataToSend: any;
       let headers: Record<string, string> = {};
+      // Detect FormData
+  if (variables instanceof FormData) {
+    isHeaderJSON = false;
+  }
       if (isHeaderJSON) {
         dataToSend = variables;
         headers["Content-Type"] = "application/json";

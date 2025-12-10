@@ -68,7 +68,6 @@ const Register = () => {
       email:value.Email,
       password:value.Password,
       image:'',
-      role:'user',
       noTelp:value.noTelp,
       callbackURL:'http://localhost:5173/auth/login'
     })

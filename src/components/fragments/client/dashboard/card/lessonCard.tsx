@@ -62,7 +62,7 @@ export default function LessonCard() {
       return (
         <Card
           key={value.type}
-          className="w-full max-w-[450px] h-[400px] pt-0 overflow-hidden"
+          className="w-full md:max-w-[475px] h-[400px] pt-0 overflow-hidden"
         >
           <CardHeader className="p-0 bg-amber-300 flex justify-items item-center py-4 px-3">
             <div className="flex justify-between item-center w-full">
@@ -88,7 +88,7 @@ export default function LessonCard() {
               </div>
               <div className="bg-blue-200 size-full max-h-[200px] flex flex-col p-3 rounded-md">
                 <h3 className="text-base font-semibold">Question type</h3>
-                <ul className="list-disc pl-5 columns-2 gap-8 max-sm:text-xs max-sm:columns-1">
+                <ul className="list-disc pl-5 columns-2 gap-8 text-xs max-sm:columns-1 overflow-hidden">
                   {value.questionList.map((v) => (
                     <li key={v + value.type}>{v}</li>
                   ))}
@@ -104,7 +104,7 @@ export default function LessonCard() {
     });
   }
   return (
-    <div className="mx-auto flex flex-wrap gap-4 lg:row-2 justify-center">
+    <div className="grid grid-rows-2 grid-cols-2 w-full gap-4 max-md:grid-cols-1 max-md:justify-items-center max-md:items-center">
       <CardComponent />
     </div>
   );

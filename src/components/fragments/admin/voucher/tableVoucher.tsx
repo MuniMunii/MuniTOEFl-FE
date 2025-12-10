@@ -91,8 +91,9 @@ export default function VoucherTable() {
   pageIndex: 0,
   pageSize: 8,
 });
+const sortedDataBydate=data?.data?.sort((a,b)=>new Date(b.createdAt).getTime()-new Date(a.createdAt).getTime())
   const table = useReactTable({
-    data: voucherData||[],
+    data: sortedDataBydate||[],
     columns,
     onRowSelectionChange: setRowSelection,
     getPaginationRowModel:getPaginationRowModel(),
