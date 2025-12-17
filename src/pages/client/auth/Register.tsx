@@ -59,6 +59,7 @@ const Register = () => {
       Email: "",
       Password: "",
       ConfirmPassword: "",
+      noTelp:""
     },
   });
   async function onsubmit(value:RegisterType) {

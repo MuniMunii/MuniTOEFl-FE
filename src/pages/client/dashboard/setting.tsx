@@ -11,13 +11,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { PersonStanding } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 const UpdateFormProps = z.object({
   name: z.string(),
@@ -29,9 +31,33 @@ const UpdateFormProps = z.object({
       message: "Phone number must be 6–17 digits",
     }),
   email: z.string().optional(),
-});
+  password: z
+      .string()
+      .regex(
+        /^(?=.*[A-Z])(?=.*\d).{6,}$/,
+        "Password must contain at least one uppercase letter and one number"
+      ).optional(),
+  confirmPassword:z.string().optional()
+})
+async function getUserProvider(){
+  const {data:info}=await authClient.listAccounts()
+  return info?.some(data=>data.providerId==='credential')
+}
 export default function SettingPage() {
   const { data: session } = authClient.useSession();
+  const [isUserCredentials,setIsUserCredentials]=useState<boolean|null|undefined>(null)
+ useEffect(() => {
+    if (!session?.user) return;
+
+    const run = async () => {
+      const result = await getUserProvider();
+      setIsUserCredentials(result);
+    };
+
+    run();
+  }, [session]);
+  useEffect(()=>{console.log(isUserCredentials)},[isUserCredentials])
+  useEffect(()=>{console.log(session?.user)},[session])
   const inputRef = useRef<HTMLInputElement>(null);
   const form = useForm({
     resolver: zodResolver(UpdateFormProps),
@@ -39,23 +65,63 @@ export default function SettingPage() {
       name: session?.user.name,
       noTelp: session?.user.noTelp,
       email: session?.user.email,
+      password:'',
+      confirmPassword:''
     },
   });
+  const { isDirty, dirtyFields } = form.formState;
+  // useEffect for cleaning form after submit
   useEffect(() => {
     if (session?.user) {
       form.reset({
         name: session.user.name,
         noTelp: session.user.noTelp ?? "",
         email: session.user.email,
+        password:'',
+        confirmPassword:''
       });
     }
   }, [session, form]);
-  async function handleUpdate() {
-    return await authClient.updateUser({
-      name: form.getValues().name,
-      noTelp: form.getValues().noTelp,
-    });
-  }
+  const updateMutation = useMutation({
+  mutationFn: async () => {
+    const {
+      confirmPassword,
+      password,
+      name,
+      noTelp,
+    } = form.getValues();
+    if (password || confirmPassword) {
+      if (!password || !confirmPassword) {
+        throw new Error("Both current and new password are required");
+      }
+      const resPass=await authClient.changePassword({
+        currentPassword:confirmPassword,
+        newPassword:password,
+      });
+      if(resPass.error){
+        throw new Error(resPass.error.message)
+      }
+    }
+    if (dirtyFields.name || dirtyFields.noTelp) {
+      const resGeneral=await authClient.updateUser({ name, noTelp });
+      if(resGeneral.error){
+        throw new Error(resGeneral.error.message)
+      }
+    }
+  },
+  onSuccess:() => {
+    toast(`Success changing profile`)
+    form.reset(form.getValues());
+  },
+    onError: (err:any) => {
+    toast(`Error changing profile: ${err.message}`)
+  },
+});
+
+function handleUpdate() {
+  if (!isDirty) return;
+  updateMutation.mutate();
+}
   async function removeImage() {
     return await authClient.updateUser({
       image: "",
@@ -65,7 +131,6 @@ export default function SettingPage() {
     mutationFn: async (file: File) => {
       const form = new FormData();
       form.append("image", file); // MUST MATCH your backend field name
-
       return await apiClient.post("/api/user/change-image", form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -165,10 +230,36 @@ export default function SettingPage() {
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem className="mb-4">
+                        <FormLabel>New Password</FormLabel>
+                        <FormControl>
+                          <PasswordInput disabled={!isUserCredentials} {...field} placeholder={`${!isUserCredentials?"OAuth doesnt require password":"*******"}`} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem className="mb-4">
+                        <FormLabel>Current Password</FormLabel>
+                        <FormControl>
+                          <PasswordInput disabled={!isUserCredentials} {...field} placeholder={`${!isUserCredentials?"OAuth doesnt require password":"*******"}`} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <Button
                     type="submit"
                     disabled={
-                      !form.formState.isDirty || form.formState.isSubmitting
+                      !isDirty || form.formState.isSubmitting
                     }
                   >
                     {form.formState.isSubmitting
