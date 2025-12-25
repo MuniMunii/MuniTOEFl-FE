@@ -13,6 +13,7 @@ import VoucherPage from "./pages/admin/dashboard/Voucher";
 import { Toaster } from "sonner";
 import LessonPage from "./pages/client/dashboard/lesson";
 import SettingPage from "./pages/client/dashboard/setting";
+import EditCoursePage from "./pages/admin/edit-course/editCourse";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/admin-dashboard/voucher" element={<VoucherPage />} />
             <Route path="/admin-dashboard/list-users" element={<UsersManagementPage/>} />
             <Route path="/admin-dashboard/add-course" element={<AddCourse />} />
+            <Route path="/admin-dashboard/edit-course/:type/:titleSlug" element={<EditCoursePage />} />
           </Route>
           <Route element={<ProtectedLayout allowedRoles={null} />}>
             <Route path="/role-redirect" element={<div></div>} />
