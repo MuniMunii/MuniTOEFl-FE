@@ -1,6 +1,6 @@
-import { AppSidebarAdmin } from "@/components/fragments/admin/Sidebar/sidebarAdmin";
-import AddAdmin from "@/components/fragments/admin/User Management/addAdmin";
-import UsersTable from "@/components/fragments/admin/User Management/tableUsers";
+import { AppSidebarAdmin } from "@/components/fragments/admin/sidebar/sidebarAdmin";
+import AddAdmin from "@/components/fragments/admin/user-management/addAdmin";
+import UsersTable from "@/components/fragments/admin/user-management/tableUsers";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 

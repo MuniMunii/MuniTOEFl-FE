@@ -1,4 +1,4 @@
-import { AppSidebarAdmin } from "@/components/fragments/admin/Sidebar/sidebarAdmin";
+import { AppSidebarAdmin } from "@/components/fragments/admin/sidebar/sidebarAdmin";
 import AddVoucher from "@/components/fragments/admin/voucher/addVoucher";
 import VoucherTable from "@/components/fragments/admin/voucher/tableVoucher";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";

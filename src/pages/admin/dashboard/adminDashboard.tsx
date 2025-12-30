@@ -1,4 +1,4 @@
-import { AppSidebarAdmin } from "@/components/fragments/admin/Sidebar/sidebarAdmin";
+import { AppSidebarAdmin } from "@/components/fragments/admin/sidebar/sidebarAdmin";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 
