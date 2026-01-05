@@ -1,4 +1,5 @@
 import { apiClient } from "@/api/axiosClient"
+import QuestionBlock from "@/components/fragments/admin/edit-course/question-block";
 import { Button } from "@/components/ui/button";
 import type { metaTestDataType } from "@/schemas/test";
 import { addQuestionStore } from "@/store/editCourseStore";
@@ -26,6 +27,11 @@ const { data:questionData, isLoading:questionLoading, error:questionError } = us
   enabled: Boolean(metaData?._id),
   
 });
+function hasEmptyChoiceTitle(questions: questionType[]): boolean {
+  return questions.some(q =>
+    q.choices.some(c => !c.cTitle.trim())
+  );
+}
 useEffect(()=>{console.log(metaData?.titleSlug)},[metaData])
 useEffect(()=>{
   if(questionError){toast(`error fetching data ${questionError.message}`);return}
@@ -35,6 +41,7 @@ useEffect(()=>{
     <div className="size-full min-h-screen bg-white">
         <div className="w-[90%] h-full min-h-screen max-w-[1000px] border border-gray-400 rounded-md mx-auto p-4">
           <Button type="button" onClick={()=>addQuestion(testId)}>Add Question</Button>
+          {questions.map(val=><QuestionBlock key={val.cursorId} {...val}/>)}
         </div>
     </div>)
 }
