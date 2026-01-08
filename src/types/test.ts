@@ -1,4 +1,5 @@
 import {z} from 'zod'
+import type { Content } from '@tiptap/core'
 const serializedEditorStateSchema = z.object({
   root: z.object({
     type: z.string(),
@@ -9,16 +10,18 @@ const serializedEditorStateSchema = z.object({
     children: z.array(z.any()),
   }),
 })
+const ContentSchema:z.ZodType<Content> = z.any()
 export const questionScheme=z.object({
     /**
      * @Note
      * id:Temporary only for detecting question
      */
+    _id:z.string(),
     cursorId:z.string(),
     testId:z.string(),//Ref from meta test
     order:z.number(),
     qTitle:z.string(),
-    qDescription:serializedEditorStateSchema,
+    qDescription:ContentSchema,
     choices:z.array(z.object({
         choiceId:z.string(),//ref like cursorId but for choices
         cTitle:z.string().trim().min(1,"Choices title cannot be empty"),

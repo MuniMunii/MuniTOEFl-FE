@@ -5,7 +5,7 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/u
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useMutate } from "@/hooks/useMutation"
-import type { metaTestDataType } from "@/schemas/test"
+import type { metaTestDataType } from "@/schemas/meta-test"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { BoxIcon } from "lucide-react"
 import { useState } from "react"

@@ -39,6 +39,7 @@ export function useMutate<TData, TVariables = unknown>({
         data: dataToSend,
         headers,
         withCredentials: true,
+        
       });
 
       return response.data;
