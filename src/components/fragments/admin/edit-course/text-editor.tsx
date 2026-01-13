@@ -1,4 +1,6 @@
-import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor"
+// import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor"
+
+import { SimpleEditor } from "@/components/tiptap-editor/tiptap-templates/simple/simple-editor"
 import type { Content } from "@tiptap/core"
 
 export default function TextEditorTest({cursorId,initialDescription}:{initialDescription:Content,cursorId:string}) {

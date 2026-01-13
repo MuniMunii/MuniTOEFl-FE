@@ -8,20 +8,20 @@ import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
 import { ChevronDownIcon } from "@/components/tiptap-editor/tiptap-icons/chevron-down-icon"
 
 // --- Tiptap UI ---
-import { ListButton, type ListType } from "@/components/tiptap-ui/list-button"
+import { ListButton, type ListType } from "@/components/tiptap-editor/tiptap-ui/list-button"
 
-import { useListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu/use-list-dropdown-menu"
+import { useListDropdownMenu } from "@/components/tiptap-editor/tiptap-ui/list-dropdown-menu/use-list-dropdown-menu"
 
 // --- UI Primitives ---
-import type { ButtonProps } from "@/components/tiptap-ui-primitive/button"
-import { Button, ButtonGroup } from "@/components/tiptap-ui-primitive/button"
+import type { ButtonProps } from "@/components/tiptap-editor/tiptap-ui-primitive/button"
+import { Button, ButtonGroup } from "@/components/tiptap-editor/tiptap-ui-primitive/button"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/components/tiptap-ui-primitive/dropdown-menu"
-import { Card, CardBody } from "@/components/tiptap-ui-primitive/card"
+} from "@/components/tiptap-editor/tiptap-ui-primitive/dropdown-menu"
+import { Card, CardBody } from "@/components/tiptap-editor/tiptap-ui-primitive/card"
 
 export interface ListDropdownMenuProps extends Omit<ButtonProps, "type"> {
   /**

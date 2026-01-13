@@ -68,10 +68,14 @@ useEffect(()=>{
             <h2>time:{metaData?.time}</h2>
           </div>
           <Button type="button" onClick={handleAddQuestion} disabled={addQuestionMutate.isPending}>Add Question</Button>
+          <div className="flex flex-col gap-4 mt-4">
           {questions.map(val=><QuestionBlock key={val.cursorId} {...val}/>)}
+          </div>
         </div>
     </div>
-    <Button type="button" onClick={handleSaveQuestion} disabled={!isDirty} className="fixed bottom-3 right-3">Save Question</Button>
+    <Button type="button"
+     onClick={handleSaveQuestion} 
+    disabled={!isDirty} className="fixed bottom-3 right-3">Save Question</Button>
     </>
     )
 }

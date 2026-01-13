@@ -11,30 +11,30 @@ import { BanIcon } from "@/components/tiptap-editor/tiptap-icons/ban-icon"
 import { HighlighterIcon } from "@/components/tiptap-editor/tiptap-icons/highlighter-icon"
 
 // --- UI Primitives ---
-import type { ButtonProps } from "@/components/tiptap-ui-primitive/button"
-import { Button, ButtonGroup } from "@/components/tiptap-ui-primitive/button"
+import type { ButtonProps } from "@/components/tiptap-editor/tiptap-ui-primitive/button"
+import { Button, ButtonGroup } from "@/components/tiptap-editor/tiptap-ui-primitive/button"
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/tiptap-ui-primitive/popover"
-import { Separator } from "@/components/tiptap-ui-primitive/separator"
+} from "@/components/tiptap-editor/tiptap-ui-primitive/popover"
+import { Separator } from "@/components/tiptap-editor/tiptap-ui-primitive/separator"
 import {
   Card,
   CardBody,
   CardItemGroup,
-} from "@/components/tiptap-ui-primitive/card"
+} from "@/components/tiptap-editor/tiptap-ui-primitive/card"
 
 // --- Tiptap UI ---
 import type {
   HighlightColor,
   UseColorHighlightConfig,
-} from "@/components/tiptap-ui/color-highlight-button"
+} from "@/components/tiptap-editor/tiptap-ui/color-highlight-button"
 import {
   ColorHighlightButton,
   pickHighlightColorsByValue,
   useColorHighlight,
-} from "@/components/tiptap-ui/color-highlight-button"
+} from "@/components/tiptap-editor/tiptap-ui/color-highlight-button"
 
 export interface ColorHighlightPopoverContentProps {
   /**

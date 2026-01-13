@@ -7,20 +7,20 @@ import { ChevronDownIcon } from "@/components/tiptap-editor/tiptap-icons/chevron
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
 
 // --- Tiptap UI ---
-import { HeadingButton } from "@/components/tiptap-ui/heading-button"
-import type { UseHeadingDropdownMenuConfig } from "@/components/tiptap-ui/heading-dropdown-menu"
-import { useHeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu"
+import { HeadingButton } from "@/components/tiptap-editor/tiptap-ui/heading-button"
+import type { UseHeadingDropdownMenuConfig } from "@/components/tiptap-editor/tiptap-ui/heading-dropdown-menu"
+import { useHeadingDropdownMenu } from "@/components/tiptap-editor/tiptap-ui/heading-dropdown-menu"
 
 // --- UI Primitives ---
-import type { ButtonProps } from "@/components/tiptap-ui-primitive/button"
-import { Button, ButtonGroup } from "@/components/tiptap-ui-primitive/button"
+import type { ButtonProps } from "@/components/tiptap-editor/tiptap-ui-primitive/button"
+import { Button, ButtonGroup } from "@/components/tiptap-editor/tiptap-ui-primitive/button"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/components/tiptap-ui-primitive/dropdown-menu"
-import { Card, CardBody } from "@/components/tiptap-ui-primitive/card"
+} from "@/components/tiptap-editor/tiptap-ui-primitive/dropdown-menu"
+import { Card, CardBody } from "@/components/tiptap-editor/tiptap-ui-primitive/card"
 
 export interface HeadingDropdownMenuProps
   extends Omit<ButtonProps, "type">,

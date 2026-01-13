@@ -20,7 +20,7 @@ import {
   isListActive,
   listIcons,
   type ListType,
-} from "@/components/tiptap-ui/list-button"
+} from "@/components/tiptap-editor/tiptap-ui/list-button"
 
 /**
  * Configuration for the list dropdown menu functionality

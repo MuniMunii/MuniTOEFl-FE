@@ -37,7 +37,7 @@ export default function QuestionBlock(question:questionType){
         </AccordionContent>
         </AccordionItem>
         </Accordion>
-        <div>
+        <div className="my-4 flex gap-4">
         <Button type="button" onClick={()=>addChoices(cursorId)}>Add Choices</Button>
         <Button type="button" onClick={()=>deleteQuestionMutate.mutate({_id,testId})}>Delete Question</Button>
         </div>
