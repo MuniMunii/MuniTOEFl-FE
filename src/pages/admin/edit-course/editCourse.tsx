@@ -1,11 +1,12 @@
 import { apiClient } from "@/api/axiosClient"
+import EditMetaTest from "@/components/fragments/admin/edit-course/edit-metaTest";
 import QuestionBlock from "@/components/fragments/admin/edit-course/question-block";
 import { Button } from "@/components/ui/button";
 import { useMutate } from "@/hooks/useMutation";
 import type { metaTestDataType } from "@/schemas/meta-test";
 import { addQuestionStore } from "@/store/editCourseStore";
 import type { questionType } from "@/types/test";
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect } from "react";
 import { useParams } from "react-router-dom"
 import { toast } from "sonner";
@@ -44,6 +45,19 @@ const { data:questionData, isLoading:questionLoading, error:questionError } = us
       method:'PATCH',
       
     })
+  const updateMeta = useMutation({
+    mutationFn:async ({ prop, value }: { prop: string; value: any }) =>{
+      const res=await apiClient.patch(`/api/test/update-meta/${prop}/${testId}`, {
+        value,
+      })
+      return await res.data
+
+    },
+    onSuccess:(data)=>{
+      queryClient.invalidateQueries({queryKey:['question-test']})
+      toast(data.message)
+    }
+  });
     async function handleAddQuestion(){
       if(!testId)return 
       return addQuestionMutate.mutate({testId})
@@ -51,6 +65,10 @@ const { data:questionData, isLoading:questionLoading, error:questionError } = us
     async function handleSaveQuestion(){
       if(!testId)return 
       return saveQuestionMutate.mutate({testId,questions})
+    }
+    async function handlePublishTest(value:boolean){
+      if(!testId)return 
+      return updateMeta.mutate({prop:'published',value})
     }
 useEffect(()=>{console.log(metaData?.titleSlug)},[metaData])
 useEffect(()=>{
@@ -61,13 +79,11 @@ useEffect(()=>{
     return (<>
     <div className="size-full min-h-screen bg-white">
         <div className="w-[90%] h-full min-h-screen max-w-[1000px] border border-gray-400 rounded-md mx-auto p-4">
-          <div className="w-full">
-            <h1>{metaData?.title}</h1>
-            <h2>{metaData?.description}</h2>
-            <h2>status:{metaData?.published}</h2>
-            <h2>time:{metaData?.time}</h2>
+          <EditMetaTest metaData={metaData}/>
+          <div className="flex gap-4 flex-col">
+          <Button type="button" onClick={handleAddQuestion} disabled={addQuestionMutate.isPending} className="mt-4">Add Question</Button>
+          {!metaData?.published?<Button type="button" onClick={()=>handlePublishTest(true)} disabled={updateMeta.isPending}>Publish Test</Button>:<Button type="button" onClick={()=>handlePublishTest(false)} disabled={updateMeta.isPending}>Unpublish Test</Button>}
           </div>
-          <Button type="button" onClick={handleAddQuestion} disabled={addQuestionMutate.isPending}>Add Question</Button>
           <div className="flex flex-col gap-4 mt-4">
           {questions.map(val=><QuestionBlock key={val.cursorId} {...val}/>)}
           </div>
