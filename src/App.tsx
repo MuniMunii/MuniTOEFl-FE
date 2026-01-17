@@ -1,5 +1,5 @@
 "use client";
-import { Route, Routes } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/client/auth/Login";
@@ -14,36 +14,80 @@ import { Toaster } from "sonner";
 import LessonPage from "./pages/client/dashboard/lesson";
 import SettingPage from "./pages/client/dashboard/setting";
 import EditCoursePage from "./pages/admin/edit-course/editCourse";
-
-function App() {
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+function AppLayout(){
   return (
-    <div>
-      <main>
-        <Toaster />
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/register" element={<Register />} />
-          <Route element={<ProtectedLayout allowedRoles={["user"]} />}>
-            <Route path="/dashboard/" element={<Dashboard />} />
-            <Route path="/dashboard/lesson" element={<LessonPage />} />
-            <Route path="/dashboard/setting" element={<SettingPage />} />
-          </Route>
-          <Route element={<ProtectedLayout allowedRoles={["admin"]} />}>
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/admin-dashboard/voucher" element={<VoucherPage />} />
-            <Route path="/admin-dashboard/list-users" element={<UsersManagementPage/>} />
-            <Route path="/admin-dashboard/add-course" element={<AddCourse />} />
-            <Route path="/admin-dashboard/edit-course/:type/:titleSlug" element={<EditCoursePage />} />
-          </Route>
-          <Route element={<ProtectedLayout allowedRoles={null} />}>
-            <Route path="/role-redirect" element={<div></div>} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-    </div>
-  );
+    <><Toaster/><Outlet/></>
+  )
+}
+const router = createBrowserRouter([
+  {
+    element: <AppLayout/>,
+    children: [
+      { path: "/", element: <Homepage /> },
+      { path: "/auth/login", element: <Login /> },
+      { path: "/auth/register", element: <Register /> },
+
+      {
+        element: <ProtectedLayout allowedRoles={["user"]} />,
+        children: [
+          { path: "/dashboard", element: <Dashboard /> },
+          { path: "/dashboard/lesson", element: <LessonPage /> },
+          { path: "/dashboard/setting", element: <SettingPage />, },
+        ],
+      },
+
+      {
+        element: <ProtectedLayout allowedRoles={["admin"]} />,
+        children: [
+          { path: "/admin-dashboard", element: <AdminDashboard /> },
+          { path: "/admin-dashboard/voucher", element: <VoucherPage /> },
+          { path: "/admin-dashboard/list-users", element: <UsersManagementPage /> },
+          { path: "/admin-dashboard/add-course", element: <AddCourse /> },
+          {
+            path: "/admin-dashboard/edit-course/:type/:titleSlug",
+            element: <EditCoursePage />,
+          },
+        ],
+      },
+
+      { path: "*", element: <NotFound /> },
+    ],
+  },
+]);
+
+export default function App() {
+  return <RouterProvider router={router} />;
 }
 
-export default App;
+// function App() {
+//   return (
+//     <div>
+//       <main>
+//         <Toaster />
+//         <Routes>
+//           <Route path="/" element={<Homepage />} />
+//           <Route path="/auth/login" element={<Login />} />
+//           <Route path="/auth/register" element={<Register />} />
+//           <Route element={<ProtectedLayout allowedRoles={["user"]} />}>
+//             <Route path="/dashboard/" element={<Dashboard />} />
+//             <Route path="/dashboard/lesson" element={<LessonPage />} />
+//             <Route path="/dashboard/setting" element={<SettingPage />} />
+//           </Route>
+//           <Route element={<ProtectedLayout allowedRoles={["admin"]} />}>
+//             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+//             <Route path="/admin-dashboard/voucher" element={<VoucherPage />} />
+//             <Route path="/admin-dashboard/list-users" element={<UsersManagementPage/>} />
+//             <Route path="/admin-dashboard/add-course" element={<AddCourse />} />
+//             <Route path="/admin-dashboard/edit-course/:type/:titleSlug" element={<EditCoursePage />} />
+//           </Route>
+//           <Route element={<ProtectedLayout allowedRoles={null} />}>
+//             <Route path="/role-redirect" element={<div></div>} />
+//           </Route>
+//           <Route path="*" element={<NotFound />} />
+//         </Routes>
+//       </main>
+//     </div>
+//   );
+// }
+// export default App;

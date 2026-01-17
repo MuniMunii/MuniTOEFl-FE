@@ -208,6 +208,7 @@ const onLinkClick = useCallback(
 
   const editor = useEditor({
     immediatelyRender: false,
+    shouldRerenderOnTransaction:false,
     editorProps: {
       attributes: {
         autocomplete: "off",
