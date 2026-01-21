@@ -90,7 +90,7 @@ useBeforeUnload(isDirty)
       return await res.data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["question-test"] });
+      queryClient.invalidateQueries({ queryKey: ["metadata-test"] });
       toast(data.message);
     },
   });

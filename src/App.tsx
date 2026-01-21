@@ -15,6 +15,9 @@ import LessonPage from "./pages/client/dashboard/lesson";
 import SettingPage from "./pages/client/dashboard/setting";
 import EditCoursePage from "./pages/admin/edit-course/editCourse";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ConfirmationTakeQuizPage from "./pages/client/take-quiz/confirmation";
+import QuizSessionPage from "./pages/client/take-quiz/quizSession";
+import quizSessionLoader from "./loader/quizSessionLoader";
 function AppLayout(){
   return (
     <><Toaster/><Outlet/></>
@@ -34,6 +37,8 @@ const router = createBrowserRouter([
           { path: "/dashboard", element: <Dashboard /> },
           { path: "/dashboard/lesson", element: <LessonPage /> },
           { path: "/dashboard/setting", element: <SettingPage />, },
+          {path:'/take-test/:type/:testId',element:<ConfirmationTakeQuizPage/>},
+          {path:'/quiz-session/:type/:testId',element:<QuizSessionPage/>,loader:quizSessionLoader}
         ],
       },
 
