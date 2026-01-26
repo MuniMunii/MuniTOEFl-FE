@@ -20,7 +20,8 @@ export default function EditCoursePage() {
     setQuestion,
     addQuestionToStore,
     clearDirtyForm,
-    isDirty
+    isDirty,
+    // setChoicesForQuestion,
   } = addQuestionStore();
 const blocker = useBlocker(isDirty);
 useBeforeUnload(isDirty)
@@ -110,7 +111,7 @@ useBeforeUnload(isDirty)
   // useEffect(() => {
   //   console.log(metaData?.titleSlug);
   // }, [metaData]);
-    // useEffect(() => {
+  //   useEffect(() => {
   //   console.log(questions);
   // }, [questions]);
   useEffect(() => {
@@ -165,9 +166,10 @@ useBeforeUnload(isDirty)
             )}
           </div>
           <div className="flex flex-col gap-4 mt-4">
-            {questions.map((val) => (
+            {questions.map((val,i) => (
               <QuestionBlock
                 key={val.cursorId}
+                order={i+1}
                 question={val}
                 questionLoading={questionLoading}
                 questionError={questionError}

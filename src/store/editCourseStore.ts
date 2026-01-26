@@ -14,6 +14,7 @@ type Action = {
   editQuestionTitle:(cursorId:string,value:string)=>void;
   editQuestionDescription:(cursorId:string,value:Content)=>void;
   editChoiceTitle:(cursorId:string,choiceId:string,value:string)=>void;
+  selectCorrectAnswer:(cursorId:string,choiceId:string)=>void;
   deleteChoice:(cursorId:string,choiceId:string)=>void;
   deleteQuestionFromState:(cursorId:string)=>void;
   clearDirtyForm:()=>void;
@@ -88,6 +89,19 @@ export const addQuestionStore = create<State & Action>()(
           const question=state.questions.find((q)=>q.cursorId===cursorId)
           if(!question)return
           question.qTitle=value
+        })
+      },
+      selectCorrectAnswer:(cursorId:string, choiceId:string) =>{
+        set((state)=>{
+          state.isDirty=true;
+          console.log(state.questions.find(q=>q.cursorId===cursorId));
+          const question=state.questions.find((q)=>q.cursorId===cursorId)
+          if(!question)return
+          const choice=question.choices.find((c)=>c.choiceId===choiceId)
+          if(!choice)return
+          question.choices.forEach((c) => {
+      c.correctAnswer = c.choiceId === choiceId;
+    });
         })
       },
       clearDirtyForm:()=>{

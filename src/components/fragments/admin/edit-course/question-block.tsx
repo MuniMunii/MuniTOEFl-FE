@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { addQuestionStore } from "@/store/editCourseStore";
 import type { questionType } from "@/types/test";
@@ -12,11 +11,13 @@ import TextEditorTest from "./text-editor";
 import { useMutate } from "@/hooks/useMutation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import ChoicesList from "./choices-list";
 
-export default function QuestionBlock({question,questionLoading,questionError}:{question:questionType,questionLoading:boolean,questionError:Error|null}){
-    const {choices,cursorId,qTitle,qDescription,testId,_id}=question
+export default function QuestionBlock({question,questionLoading,questionError,order}:{order:Number,question:questionType,questionLoading:boolean,questionError:Error|null}){
+    const {cursorId,qTitle,qDescription,testId,_id,choices}=question
+    const [title,setTitle]=useState(qTitle)
     const [extend,setExtend]=useState<boolean>(false)
-    const {editChoiceTitle,addChoices,deleteChoice,editQuestionTitle,deleteQuestionFromState}=addQuestionStore()
+    const {addChoices,editQuestionTitle,deleteQuestionFromState,selectCorrectAnswer}=addQuestionStore()
     const deleteQuestionMutate=useMutate<any,{testId:string,_id:string}>({
         url:`/api/test/delete-question/${testId}/${_id}`,
         method:'DELETE',
@@ -62,7 +63,10 @@ export default function QuestionBlock({question,questionLoading,questionError}:{
         </Alert>)
     }
     return <div className="w-full min-h-20 h-fit p-3 border border-gray-500 rounded-md">
-        <Input className="w-full max-w-[450px]" value={qTitle} onChange={(e)=>editQuestionTitle(cursorId,e.currentTarget.value)}/>
+        <div className="flex gap-3 items-center">
+        <p>{`${order}`}</p>
+        <Input className="w-full max-w-[450px]" value={title} onChange={(e)=>setTitle(e.currentTarget.value)} onBlur={()=>editQuestionTitle(cursorId,title)}/>
+        </div>
         <Accordion type="single" collapsible >
             <AccordionItem value={cursorId}>
             <AccordionTrigger onClick={()=>setExtend((prev)=>!prev)}>{extend?'Hide':'Expand'} Description</AccordionTrigger>
@@ -76,12 +80,9 @@ export default function QuestionBlock({question,questionLoading,questionError}:{
         <Button type="button" onClick={()=>addChoices(cursorId)}>Add Choices</Button>
         <Button type="button" onClick={()=>deleteQuestionMutate.mutate({_id,testId})}>Delete Question</Button>
         </div>
-        <RadioGroup defaultValue={choices[0].choiceId}>
+        <RadioGroup defaultValue={choices.find(q=>q.correctAnswer)?.choiceId??choices[0]?.choiceId} onValueChange={(choiceId)=>selectCorrectAnswer(cursorId,choiceId)}>
             {choices.map(c=><div key={c.choiceId} className="flex items-center gap-3">
-                <RadioGroupItem key={`Radio-${c.choiceId}`} value={c.choiceId}/>
-                <Label id={c.cTitle}/>
-                <Input placeholder={c.cTitle??"Input form here"} value={c.cTitle} onChange={(e)=>editChoiceTitle(cursorId,c.choiceId,e.currentTarget.value)}/>
-                <Button type="button" onClick={()=>deleteChoice(cursorId,c.choiceId)} className="p-2"><XSquare/></Button>
+                <ChoicesList choices={c} cursorId={cursorId} key={`choices-List-${c.choiceId}`}/>
             </div>)}
         </RadioGroup>
     </div>

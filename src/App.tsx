@@ -18,6 +18,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ConfirmationTakeQuizPage from "./pages/client/take-quiz/confirmation";
 import QuizSessionPage from "./pages/client/take-quiz/quizSession";
 import quizSessionLoader from "./loader/quizSessionLoader";
+import RedirectPage from "./pages/RedirectPage";
 function AppLayout(){
   return (
     <><Toaster/><Outlet/></>
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
       { path: "/", element: <Homepage /> },
       { path: "/auth/login", element: <Login /> },
       { path: "/auth/register", element: <Register /> },
-
+      {path:"/role-redirect",element:<RedirectPage/>},
       {
         element: <ProtectedLayout allowedRoles={["user"]} />,
         children: [

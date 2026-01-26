@@ -12,3 +12,8 @@ interface ApiResponse<T = any> {
   error: any;        
   meta: Meta | null; 
 }
+//       setChoicesForQuestion:(cursorId,choices)=>
+        // set((state)=>{
+        //   state.isDirty=false;
+        //   state.choicesByCursorId[cursorId] = choices
+        // }),
