@@ -7,7 +7,7 @@ import { useBeforeUnload } from "@/hooks/useBeforeUnload";
 import { useMutate } from "@/hooks/useMutation";
 import type { metaTestDataType } from "@/schemas/meta-test";
 import { addQuestionStore } from "@/store/editCourseStore";
-import type { questionType } from "@/types/test";
+import { QuestionScheme, type QuestionType } from "@/schemas/test";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Link, useBlocker, useParams } from "react-router-dom";
@@ -44,18 +44,18 @@ useBeforeUnload(isDirty)
     data: questionData,
     isLoading: questionLoading,
     error: questionError,
-  } = useQuery<questionType[]>({
+  } = useQuery<QuestionType[]>({
     queryKey: ["question-test", metaData?._id],
     queryFn: async () => {
       const res = await apiClient.post(
         `/api/test/get-question/admin/${testId}`,
       );
-      return (res.data.data as questionType[]) ?? [];
+      return (res.data.data as QuestionType[]) ?? [];
     },
     enabled: Boolean(metaData?._id),
   });
   const addQuestionMutate = useMutate<
-    questionType,
+    QuestionType,
     { testId: string | undefined }
   >({
     options: {
@@ -68,7 +68,7 @@ useBeforeUnload(isDirty)
   });
   const saveQuestionMutate = useMutate<
     any,
-    { testId: string; questions: questionType[] }
+    { testId: string; questions: QuestionType[] }
   >({
     options: {
       onSuccess: () => {
@@ -101,6 +101,10 @@ useBeforeUnload(isDirty)
   }
   async function handleSaveQuestion() {
     if (!testId) return;
+    const parseQuestions=QuestionScheme.array().safeParse(questions)
+    if(!parseQuestions.success){
+      return toast(`${parseQuestions.error.issues[0].message}.`)
+    }
     return saveQuestionMutate.mutate({ testId, questions });
   }
   async function handlePublishTest(value: boolean) {

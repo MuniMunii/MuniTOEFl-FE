@@ -18,7 +18,7 @@ export default function ChoicesList({cursorId,choices:{choiceId,cTitle}}:{cursor
     return(<>
     <RadioGroupItem key={`Radio-${choiceId}`} id={choiceId} value={choiceId}/>
                 <Label id={title}/>
-                <Input placeholder={title??"Input form here"} value={title} onChange={(e)=>setTitle(e.currentTarget.value)} onBlur={()=>editChoiceTitle(cursorId,choiceId,title)}/>
+                <Input placeholder={"Input choice title here"} value={title} onChange={(e)=>setTitle(e.currentTarget.value)} onBlur={()=>editChoiceTitle(cursorId,choiceId,title)}/>
                 <Button type="button" onClick={()=>deleteChoice(cursorId,choiceId)} className="p-2"><XSquare/></Button>
     </>
     )

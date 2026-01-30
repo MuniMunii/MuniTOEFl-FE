@@ -1,15 +1,15 @@
-import type { questionType} from "@/types/test";
+import type { QuestionType} from "@/schemas/test";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { nanoid } from "nanoid";
 import type { Content } from "@tiptap/core";
 type State = {
-  questions: questionType[];
+  questions: QuestionType[];
   isDirty:boolean;
 };
 type Action = {
-  setQuestion: (data: questionType[]) => void;
-  addQuestionToStore: (question:questionType|null) => void;
+  setQuestion: (data: QuestionType[]) => void;
+  addQuestionToStore: (question:QuestionType|null) => void;
   addChoices:  (cursorId:string)=>void;
   editQuestionTitle:(cursorId:string,value:string)=>void;
   editQuestionDescription:(cursorId:string,value:Content)=>void;
@@ -23,12 +23,12 @@ export const addQuestionStore = create<State & Action>()(
   immer((set) => ({
     questions: [],
     isDirty:false,
-    setQuestion: (data: questionType[]) =>
+    setQuestion: (data: QuestionType[]) =>
       set((state) => {
         state.isDirty = false
         state.questions = [...data].sort((a, b) => a.order - b.order).map(val=>({...val,cursorId:val.cursorId??nanoid(10),choices:val.choices.map(c=>({...c,choiceId:c.choiceId??nanoid(10)}))}));
       }),
-    addQuestionToStore: (question:questionType|null) =>
+    addQuestionToStore: (question:QuestionType|null) =>
       set((state) => {
         state.isDirty=true
         if(!question)return;
@@ -47,7 +47,7 @@ export const addQuestionStore = create<State & Action>()(
         state.isDirty=true
         if(!question)return
         if(question.choices.length===5)return
-        question?.choices.push({choiceId:nanoid(10),cTitle:'Title choice',correctAnswer:false})
+        question?.choices.push({choiceId:nanoid(10),cTitle:'',correctAnswer:false})
         })
       },
       deleteQuestionFromState:(cursorId:string)=>{

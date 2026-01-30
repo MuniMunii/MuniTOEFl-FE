@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useMutate } from "@/hooks/useMutation";
+import type { VoucherType } from "@/schemas/voucher";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { useQueryClient } from "@tanstack/react-query";
 import { Ticket } from "lucide-react";
@@ -20,7 +21,9 @@ export default function ActivateVoucherDialog(){
         method:'POST',
         options:{
             onError:(err)=>toast(err.message),
-            onSuccess:(data)=>{toast(data.message);queryClient.invalidateQueries({queryKey:['activate-vouchers']})}
+            onSuccess:(data)=>{
+                const validData=data.data as VoucherType
+                toast(data.message);queryClient.invalidateQueries({queryKey:['activate-vouchers']});queryClient.invalidateQueries({queryKey:['lesson-card',validData.typeV]})}
         }
     })
     function activateVoucherSubmit(value:{id:string}){

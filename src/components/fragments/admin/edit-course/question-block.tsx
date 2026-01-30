@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { addQuestionStore } from "@/store/editCourseStore";
-import type { questionType } from "@/types/test";
+import type { QuestionType } from "@/schemas/test";
 import { AlertCircleIcon, XSquare } from "lucide-react";
 // import TextEditorQuestion from "./text-editor";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -13,7 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import ChoicesList from "./choices-list";
 
-export default function QuestionBlock({question,questionLoading,questionError,order}:{order:Number,question:questionType,questionLoading:boolean,questionError:Error|null}){
+export default function QuestionBlock({question,questionLoading,questionError,order}:{order:Number,question:QuestionType,questionLoading:boolean,questionError:Error|null}){
     const {cursorId,qTitle,qDescription,testId,_id,choices}=question
     const [title,setTitle]=useState(qTitle)
     const [extend,setExtend]=useState<boolean>(false)
@@ -64,8 +64,8 @@ export default function QuestionBlock({question,questionLoading,questionError,or
     }
     return <div className="w-full min-h-20 h-fit p-3 border border-gray-500 rounded-md">
         <div className="flex gap-3 items-center">
-        <p>{`${order}`}</p>
-        <Input className="w-full max-w-[450px]" value={title} onChange={(e)=>setTitle(e.currentTarget.value)} onBlur={()=>editQuestionTitle(cursorId,title)}/>
+        <p className="p-2 px-4 font-semibold rounded-sm bg-slate-300">{`${order}`}</p>
+        <Input className="w-full max-w-[450px]" value={title} placeholder={title} onChange={(e)=>setTitle(e.currentTarget.value)} onBlur={()=>editQuestionTitle(cursorId,title)}/>
         </div>
         <Accordion type="single" collapsible >
             <AccordionItem value={cursorId}>

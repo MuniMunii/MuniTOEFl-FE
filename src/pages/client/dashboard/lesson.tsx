@@ -1,8 +1,5 @@
 import { AppSidebar } from "@/components/fragments/client/dashboard/Sidebar/Sidebar";
-import ListeningCard from "@/components/fragments/client/lesson/card/listeningCard";
-import ReadingCard from "@/components/fragments/client/lesson/card/readingCard";
-import SpeakingCard from "@/components/fragments/client/lesson/card/speakingCard";
-import WritingCard from "@/components/fragments/client/lesson/card/writingCard";
+import MetaLessonCard from "@/components/fragments/client/lesson/card/MetaLessonCard";
 import { Button } from "@/components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -32,12 +29,12 @@ export default function LessonPage(){
                             <Button className={`flex items-center gap-2 hover:text-white rounded-full ${isActive==='listening'?'':'bg-white text-black'}`} onClick={()=>setIsActive('listening')}><Headphones/>Listening</Button>
                             <Button className={`flex items-center gap-2 hover:text-white rounded-full ${isActive==='speaking'?'':'bg-white text-black'}`} onClick={()=>setIsActive('speaking')}><MicIcon/>Speaking</Button>
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            {isActive==='writing'&&<WritingCard/>}
-                            {isActive==='reading'&&<ReadingCard/>}
-                            {isActive==='listening'&&<ListeningCard/>}
-                            {isActive==='speaking'&&<SpeakingCard/>}
-                        </div>
+                        <>
+                            {isActive==='writing'&&<MetaLessonCard type={isActive}/>}
+                            {isActive==='reading'&&<MetaLessonCard type={isActive}/>}
+                            {isActive==='listening'&&<MetaLessonCard type={isActive}/>}
+                            {isActive==='speaking'&&<MetaLessonCard type={isActive}/>}
+                            </>
                       </div>
                       </div>
                     </div>

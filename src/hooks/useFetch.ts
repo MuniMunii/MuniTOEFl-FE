@@ -31,7 +31,7 @@ export function useFetch<
       return response.data
     },
     ...options,
-    staleTime:5 * 60 * 1000
+    // staleTime:5 * 60 * 1000,
   });
 }
 /**

@@ -1,10 +1,13 @@
 @import "tailwindcss";
 @import "tailwindcss";
 @import "tw-animate-css";
-
+body{
+  font-family: "SN Pro", sans-serif;
+  font-optical-sizing: auto;
+}
 @custom-variant dark (&:is(.dark *));
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "SN Pro", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 

@@ -191,7 +191,7 @@ const MobileToolbarContent = React.memo(({
 export function SimpleEditor({content,cursorId}:{content:Content,cursorId:string}) {
   const isMobile = useIsBreakpoint()
   const { height } = useWindowSize()
-      const {editQuestionDescription}=addQuestionStore()
+  const {editQuestionDescription}=addQuestionStore()
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
     "main"
   )
