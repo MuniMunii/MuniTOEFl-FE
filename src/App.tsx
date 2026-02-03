@@ -19,6 +19,7 @@ import ConfirmationTakeQuizPage from "./pages/client/take-quiz/confirmation";
 import QuizSessionPage from "./pages/client/take-quiz/quizSession";
 import quizSessionLoader from "./loader/quizSessionLoader";
 import RedirectPage from "./pages/RedirectPage";
+import voucherValidationLoader from "./loader/voucherValidationLoader";
 function AppLayout(){
   return (
     <><Toaster/><Outlet/></>
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
           { path: "/dashboard", element: <Dashboard /> },
           { path: "/dashboard/lesson", element: <LessonPage /> },
           { path: "/dashboard/setting", element: <SettingPage />, },
-          {path:'/take-test/:type/:testId',element:<ConfirmationTakeQuizPage/>},
+          {path:'/take-test/:type/:testId',element:<ConfirmationTakeQuizPage/>,loader:voucherValidationLoader},
           {path:'/quiz-session/:type/:testId',element:<QuizSessionPage/>,loader:quizSessionLoader}
         ],
       },
