@@ -1,19 +1,19 @@
 import { useMutation, type UseMutationOptions } from "@tanstack/react-query";
 import { apiClient } from "../api/axiosClient";
 type httpMethod = "POST" | "DELETE" | "PUT" | "PATCH";
-interface MutateProps<TData, TVariables = unknown> {
+interface MutateProps<TData, TVariables = unknown,TContext=unknown> {
   url: string;
   method: httpMethod;
   isHeaderJSON?: boolean;
-  options?: UseMutationOptions<ApiResponse<TData>, Error, TVariables>;
+  options?: UseMutationOptions<ApiResponse<TData>, Error, TVariables,TContext>;
 }
-export function useMutate<TData, TVariables = unknown>({
+export function useMutate<TData, TVariables = unknown,TContext=unknown>({
   url,
   isHeaderJSON = true,
   method,
   options,
-}: MutateProps<TData, TVariables>) {
-  return useMutation<ApiResponse<TData>, Error, TVariables>({
+}: MutateProps<TData, TVariables,TContext>) {
+  return useMutation<ApiResponse<TData>, Error, TVariables,TContext>({
     mutationFn: async (variables: TVariables) => {
       let dataToSend: any;
       let headers: Record<string, string> = {};

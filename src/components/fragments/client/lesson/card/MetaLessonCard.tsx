@@ -104,7 +104,7 @@ export default function LessonMetaCard({ type }: { type: string }) {
   return (
     <div className="size-full min-h-[500px] flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-4">
-        {lesson?.data?.map((meta, i) => {
+        {lesson?.data?.map((meta) => {
           return (
             <div
               key={`meta-card-${meta.titleSlug}`}
@@ -118,7 +118,7 @@ export default function LessonMetaCard({ type }: { type: string }) {
                 {(!meta.isFree&&!voucherIsActive)?
                 <Button className="w-32 p-2" type='button'>
                   Take Lesson
-                </Button>:<Button className="w-32 p-2" type="button" onClick={() => navigate("#")}>
+                </Button>:<Button className="w-32 p-2" type="button" onClick={() => navigate(`/take-test/${meta.type}/${meta._id}`)}>
                   Take Lesson
                 </Button>}
               </div>

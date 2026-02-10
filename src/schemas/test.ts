@@ -10,7 +10,7 @@ const serializedEditorStateSchema = z.object({
     children: z.array(z.any()),
   }),
 })
-const ContentSchema:z.ZodType<Content> = z.any()
+export const ContentSchema:z.ZodType<Content> = z.any()
 export const QuestionScheme=z.object({
     /**
      * @Note
