@@ -9,9 +9,19 @@ import {
 import type { AnswerChoicesTestType } from "@/schemas/test-attempt";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { data, useParams } from "react-router-dom";
 type OptimisticQuizUI=AnswerChoicesTestType&{
   selectedChoiceId:string|null
+}
+interface SavedAnswerType{
+testId:string,
+userId:string,
+status:'expired'|'in_progress'|'submitted',
+answers:{
+  questionId:string,
+  choiceId:string,
+  saved:boolean
+}[],
 }
 // Next problem should i add more endpoint to get attempt test user so it can be recovered from backend not only from cache
 export default function QuizSessionPage() {
@@ -26,10 +36,25 @@ export default function QuizSessionPage() {
       return res.data.data as OptimisticQuizUI[];
     },
   });
+  const {data:savedAnswer}=useQuery({
+    queryKey:['saved-answer',type,testId],
+    queryFn:async ()=>{
+      const res=await apiClient.get(`/api/test-attempt/get-saved-answer-question/${testId}`)
+      return res.data.data as SavedAnswerType
+    }
+  })
   const quizOrder = useMemo(() => {
     return quizData.find((val) => val.order === order);
   }, [quizData, order]);
+  const savedAnswerOrder=useMemo(()=>{
+    if(!savedAnswer)return 
+    return savedAnswer.answers.find(c=>quizOrder?.choices.some(qC=>qC.choiceId===c.choiceId))
+  }
+,[quizOrder,savedAnswer])
   useEffect(() => console.log(quizData), [quizData]);
+    useEffect(() => console.log({'savedAnswer: ':savedAnswer,
+      'savedAnswerOrder':savedAnswerOrder
+    }), [savedAnswer]);
   function handleOrder(num: number) {
     const parseNum = num.toString();
     localStorage.setItem("order", parseNum);
@@ -67,6 +92,8 @@ export default function QuizSessionPage() {
         <Quiz
           key={quizOrder._id}
           param={{type,testId}}
+          lastQuestion={quizOrder.order===quizData.length}
+          savedAnswer={savedAnswerOrder?.choiceId}
           question={quizOrder}
           handleOrder={handleOrder}
         />
