@@ -1,4 +1,3 @@
-import { TrendingUp } from "lucide-react";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 import {
   ChartContainer,
@@ -7,7 +6,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import type { ResultProps } from "@/pages/client/dashboard/result/result";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 export default function GraphResult({
   chartData,
 }: {
