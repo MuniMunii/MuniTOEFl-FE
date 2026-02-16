@@ -27,7 +27,7 @@ export default function LessonMetaCard({ type }: { type: string }) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { data: vouchers } = useFetch<ActivatedVoucherType[]>({
     queryKey: ["activate-vouchers"],
-    url: "/api/voucher/get-active-vouchers",
+    url: "/api/voucher/active-vouchers",
   });
   const voucherIsActive = vouchers?.data?.some((v) => v.typeV === type) || false;
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ export default function LessonMetaCard({ type }: { type: string }) {
     isLoading: lessonLoading,
   } = useFetch<metaTestDataType[]>({
     queryKey: ["lesson-card", type],
-    url: `/api/test/get-published-lesson/${type}`,
+    url: `/api/test/published-lesson/${type}`,
     options: {
       staleTime: 60000,
       gcTime: 5 * 60000,

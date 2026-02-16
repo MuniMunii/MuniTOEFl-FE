@@ -1,4 +1,4 @@
-import { Home, Settings,Book } from "lucide-react"
+import { Home, Settings,Book, ChevronRight, type LucideIcon } from "lucide-react"
 
 import {
   Sidebar,
@@ -10,31 +10,61 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { NavUser } from "../../../Nav-user"
 import { authClient } from "@/api/authClient"
 import ActivateVoucherDialog from "../../voucher/voucher"
+import { Link } from "react-router-dom"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import {  type ComponentType } from "react"
 
-const items = [
+type SidebarItem =
+  | {
+      type: "link"
+      title: string
+      url: string
+      icon?: LucideIcon
+    }
+  | {
+      type: "group"
+      title: string
+      icon?: LucideIcon
+      children: { title: string; url: string }[]
+    }
+  | {
+      type: "component"
+      component: ComponentType
+    }
+const items:SidebarItem[] = [
   {
+    type: "link",
     title: "Home",
     url: "/dashboard",
     icon: Home,
   },
   {
+    type: "group",
     title: "Lesson",
-    url: "/dashboard/lesson",
     icon: Book,
+    children: [
+      { title: "Record Practice", url: "/record-practice" },
+    ],
   },
   {
-    component:ActivateVoucherDialog,
+    type: "component",
+    component: ActivateVoucherDialog,
   },
   {
+    type: "link",
     title: "Settings",
     url: "/dashboard/setting",
     icon: Settings,
   },
 ]
+
 
 
 export function AppSidebar() {
@@ -48,25 +78,51 @@ export function AppSidebar() {
           <SidebarGroupLabel>StudyFirst TOEFL-ITP</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => {
-                if(item.component){
-                  const Component=item.component
-                  return (
-                  <SidebarMenuItem key={'voucher-item'}>
-                    <Component/>
-                  </SidebarMenuItem>
-                  )
-                }
-                return (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )})}
+              {items.map((item, index) => {
+  if (item.type === "component") {
+    const Component = item.component
+    return <Component key={index} />
+  }
+
+  if (item.type === "group") {
+    return (
+      <SidebarMenuItem key={item.title}>
+        <Collapsible className="group/collapsible">
+          <CollapsibleTrigger asChild>
+            <SidebarMenuButton>
+              {item.icon && <item.icon className="size-4" />}
+              {item.title}
+              <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+            </SidebarMenuButton>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <SidebarMenuSub>
+              {item.children.map((child) => (
+                <SidebarMenuSubItem key={child.title}>
+                  <SidebarMenuSubButton asChild>
+                    <Link to={child.url}>{child.title}</Link>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              ))}
+            </SidebarMenuSub>
+          </CollapsibleContent>
+        </Collapsible>
+      </SidebarMenuItem>
+    )
+  }
+
+  return (
+    <SidebarMenuItem key={item.title}>
+      <SidebarMenuButton asChild>
+        <Link to={item.url}>
+          {item.icon && <item.icon className="size-4" />}
+          {item.title}
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
+})}
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

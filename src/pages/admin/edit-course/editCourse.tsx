@@ -47,8 +47,8 @@ useBeforeUnload(isDirty)
   } = useQuery<QuestionType[]>({
     queryKey: ["question-test", metaData?._id],
     queryFn: async () => {
-      const res = await apiClient.post(
-        `/api/test/get-question/admin/${testId}`,
+      const res = await apiClient.get(
+        `/api/test/question/admin/${testId}`,
       );
       return (res.data.data as QuestionType[]) ?? [];
     },

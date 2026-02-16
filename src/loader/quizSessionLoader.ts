@@ -7,7 +7,7 @@ export default async function quizSessionLoader({params}:LoaderFunctionArgs){
     await queryClient.ensureQueryData({
         queryKey:['quiz-session',testId,type],
         queryFn:async ()=>{
-            const res =await apiClient.get(`/api/test-attempt/get-all-question/${type}/${testId}`)
+            const res =await apiClient.get(`/api/test-attempt/all-question/${type}/${testId}`)
             return res.data
         },
         

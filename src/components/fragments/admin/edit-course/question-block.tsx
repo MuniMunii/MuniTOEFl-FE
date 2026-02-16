@@ -19,7 +19,7 @@ export default function QuestionBlock({question,questionLoading,questionError,or
     const [extend,setExtend]=useState<boolean>(false)
     const {addChoices,editQuestionTitle,deleteQuestionFromState,selectCorrectAnswer}=addQuestionStore()
     const deleteQuestionMutate=useMutate<any,{testId:string,_id:string}>({
-        url:`/api/test/delete-question/${testId}/${_id}`,
+        url:`/api/test/question/${testId}/${_id}`,
         method:'DELETE',
         options:{
             onSuccess:()=>{

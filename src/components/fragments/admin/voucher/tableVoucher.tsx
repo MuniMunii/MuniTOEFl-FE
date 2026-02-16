@@ -51,7 +51,7 @@ const columns: ColumnDef<VoucherType>[] = [
       const vID = row.getValue('id') as string
       const queryClient=useQueryClient()
           const mutateVoucher = useMutate<VoucherType, { id:string }>({
-  url: "/api/voucher/delete-voucher",
+  url: "/api/voucher/voucher",
     method: "DELETE",
     options:{
         onError:()=>toast('Error deleting voucher'),
@@ -82,7 +82,7 @@ const columns: ColumnDef<VoucherType>[] = [
 export default function VoucherTable() {
         const { data, isLoading, error } = useFetch<VoucherType[], ["voucher"]>({
     queryKey: ["voucher"],
-    url: "/api/voucher/get-all-voucher",
+    url: "/api/voucher/all-vouchers",
    });
     const [voucherData,setVoucherData]=useState<VoucherType[]>([])
     useEffect(()=>{if(data?.data)setVoucherData(data?.data)},[data])

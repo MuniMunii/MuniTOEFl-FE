@@ -1,14 +1,6 @@
 import { TrendingUp } from "lucide-react";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -16,7 +8,6 @@ import {
 } from "@/components/ui/chart";
 import type { ResultProps } from "@/pages/client/dashboard/result/result";
 import { useEffect, useState } from "react";
-import { number } from "zod";
 export default function GraphResult({
   chartData,
 }: {

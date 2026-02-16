@@ -9,21 +9,20 @@ import {
 import type { AnswerChoicesTestType } from "@/schemas/test-attempt";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { data, useParams } from "react-router-dom";
-type OptimisticQuizUI=AnswerChoicesTestType&{
-  selectedChoiceId:string|null
+import { useParams } from "react-router-dom";
+type OptimisticQuizUI = AnswerChoicesTestType & {
+  selectedChoiceId: string | null;
+};
+interface SavedAnswerType {
+  testId: string;
+  userId: string;
+  status: "expired" | "in_progress" | "submitted";
+  answers: {
+    questionId: string;
+    choiceId: string;
+    saved: boolean;
+  }[];
 }
-interface SavedAnswerType{
-testId:string,
-userId:string,
-status:'expired'|'in_progress'|'submitted',
-answers:{
-  questionId:string,
-  choiceId:string,
-  saved:boolean
-}[],
-}
-// Next problem should i add more endpoint to get attempt test user so it can be recovered from backend not only from cache
 export default function QuizSessionPage() {
   const { type, testId } = useParams();
   const [order, setOrder] = useState<number>(1);
@@ -31,30 +30,37 @@ export default function QuizSessionPage() {
     queryKey: ["quiz-session", type, testId],
     queryFn: async () => {
       const res = await apiClient.get(
-        `/api/test-attempt/get-all-question/${type}/${testId}`,
+        `/api/test-attempt/all-question/${type}/${testId}`,
       );
       return res.data.data as OptimisticQuizUI[];
     },
   });
-  const {data:savedAnswer}=useQuery({
-    queryKey:['saved-answer',type,testId],
-    queryFn:async ()=>{
-      const res=await apiClient.get(`/api/test-attempt/get-saved-answer-question/${testId}`)
-      return res.data.data as SavedAnswerType
-    }
-  })
+  const { data: savedAnswer } = useQuery({
+    queryKey: ["saved-answer", type, testId],
+    queryFn: async () => {
+      const res = await apiClient.get(
+        `/api/test-attempt/saved-answer-question/${testId}`,
+      );
+      return res.data.data as SavedAnswerType;
+    },
+  });
   const quizOrder = useMemo(() => {
     return quizData.find((val) => val.order === order);
   }, [quizData, order]);
-  const savedAnswerOrder=useMemo(()=>{
-    if(!savedAnswer)return 
-    return savedAnswer.answers.find(c=>quizOrder?.choices.some(qC=>qC.choiceId===c.choiceId))
-  }
-,[quizOrder,savedAnswer])
-  useEffect(() => console.log(quizData), [quizData]);
-    useEffect(() => console.log({'savedAnswer: ':savedAnswer,
-      'savedAnswerOrder':savedAnswerOrder
-    }), [savedAnswer]);
+  const savedAnswerOrder = useMemo(() => {
+    if (!savedAnswer) return;
+    return savedAnswer.answers.find((c) =>
+      quizOrder?.choices.some((qC) => qC.choiceId === c.choiceId),
+    );
+  }, [quizOrder, savedAnswer]);
+  useEffect(
+    () =>
+      console.log({
+        "savedAnswer: ": savedAnswer,
+        savedAnswerOrder: savedAnswerOrder,
+      }),
+    [savedAnswer],
+  );
   function handleOrder(num: number) {
     const parseNum = num.toString();
     localStorage.setItem("order", parseNum);
@@ -66,7 +72,9 @@ export default function QuizSessionPage() {
     }
     localStorage.setItem("order", String(order));
   }, [order]);
-  useEffect(() => console.log(quizOrder), [quizOrder]);
+  // debugging
+  // useEffect(() => console.log(quizData), [quizData]);
+  // useEffect(() => console.log(quizOrder), [quizOrder]);
   return (
     <div className="size-full min-h-screen">
       <div className="w-full h-12 py-2 px-1 flex items-center bg-gray-800"></div>
@@ -91,8 +99,8 @@ export default function QuizSessionPage() {
       {quizOrder && (
         <Quiz
           key={quizOrder._id}
-          param={{type,testId}}
-          lastQuestion={quizOrder.order===quizData.length}
+          param={{ type, testId }}
+          lastQuestion={quizOrder.order === quizData.length}
           savedAnswer={savedAnswerOrder?.choiceId}
           question={quizOrder}
           handleOrder={handleOrder}

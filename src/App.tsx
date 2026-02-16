@@ -21,6 +21,7 @@ import quizSessionLoader from "./loader/quizSessionLoader";
 import RedirectPage from "./pages/RedirectPage";
 import voucherValidationLoader from "./loader/voucherValidationLoader";
 import ResultPage from "./pages/client/dashboard/result/result";
+import RecordPracticePage from "./pages/client/dashboard/result/recordPractice";
 function AppLayout(){
   return (
     <><Toaster/><Outlet/></>
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
           { path: "/dashboard/setting", element: <SettingPage />, },
           {path:'/take-test/:type/:testId',element:<ConfirmationTakeQuizPage/>,loader:voucherValidationLoader},
           {path:'/quiz-session/:type/:testId',element:<QuizSessionPage/>,loader:quizSessionLoader},
+          {path:'/record-practices',element:<RecordPracticePage/>},
           {path:'/result/:attemptId',element:<ResultPage/>}
         ],
       },
