@@ -32,8 +32,8 @@ useBeforeUnload(isDirty)
   } = useQuery<metaTestDataType>({
     queryKey: ["metadata-test", type, titleSlug],
     queryFn: async () => {
-      const res = await apiClient.post(
-        `/api/test/get-metadata-test/${type}/${titleSlug}`,
+      const res = await apiClient.get(
+        `/api/test/metadata/${type}/${titleSlug}`,
       );
       return res.data.data as metaTestDataType;
     },
@@ -48,7 +48,7 @@ useBeforeUnload(isDirty)
     queryKey: ["question-test", metaData?._id],
     queryFn: async () => {
       const res = await apiClient.get(
-        `/api/test/question/admin/${testId}`,
+        `/api/admin/test/questions/${testId}`,
       );
       return (res.data.data as QuestionType[]) ?? [];
     },
@@ -64,7 +64,7 @@ useBeforeUnload(isDirty)
       },
     },
     method: "POST",
-    url: `/api/test/add-question/${testId}`,
+    url: `/api/admin/test/metadata/${testId}/questions`,
   });
   const saveQuestionMutate = useMutate<
     any,
@@ -77,13 +77,13 @@ useBeforeUnload(isDirty)
         queryClient.invalidateQueries({ queryKey: ["question-test"] });
       },
     },
-    url: `/api/test/save-questions/${testId}/save`,
+    url: `/api/admin/test/metadata/${testId}/questions/save`,
     method: "PATCH",
   });
   const updateMeta = useMutation({
     mutationFn: async ({ prop, value }: { prop: string; value: any }) => {
       const res = await apiClient.patch(
-        `/api/test/update-meta/${prop}/${testId}`,
+        `/api/admin/test/metadata/${testId}/${prop}`,
         {
           value,
         },

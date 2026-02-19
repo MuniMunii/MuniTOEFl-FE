@@ -37,7 +37,7 @@ export default function LessonMetaCard({ type }: { type: string }) {
     isLoading: lessonLoading,
   } = useFetch<metaTestDataType[]>({
     queryKey: ["lesson-card", type],
-    url: `/api/test/published-lesson/${type}`,
+    url: `/api/test/metadata/published?type=${type}&page=${currentPage}`,
     options: {
       staleTime: 60000,
       gcTime: 5 * 60000,

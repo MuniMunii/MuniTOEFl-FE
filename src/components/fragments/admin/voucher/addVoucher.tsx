@@ -20,7 +20,7 @@ export default function AddVoucher(){
     })
     const queryClient=useQueryClient()
     const mutateVoucher = useMutate<addVoucherProps, { duration: durationProps|null,typeV:typeProps|null,orderLength:number }>({
-  url: "/api/voucher/vouchers",
+  url: "/api/admin/voucher/vouchers",
     method: "POST",
     options:{
         onError:()=>toast('Error adding voucher'),

@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { useFetch } from "@/hooks/useFetch";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
-import { useMutate } from "@/hooks/useMutation";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/api/axiosClient";
 const columns: ColumnDef<VoucherType>[] = [
       {
     accessorKey:'id',
@@ -50,13 +50,12 @@ const columns: ColumnDef<VoucherType>[] = [
     cell: ({ row }) => {
       const vID = row.getValue('id') as string
       const queryClient=useQueryClient()
-          const mutateVoucher = useMutate<VoucherType, { id:string }>({
-  url: "/api/voucher/voucher",
-    method: "DELETE",
-    options:{
+          const mutateVoucher = useMutation<any,Error,{id:string}>({
+  mutationFn:async({id})=>{ 
+    const res=await apiClient.delete(`/api/admin/voucher/vouchers/${id}`)
+  return res.data},
         onError:()=>toast('Error deleting voucher'),
         onSuccess:()=>{toast('Successfully deleting voucher');queryClient.invalidateQueries({queryKey:["voucher"]})}
-    }
   });
       return (
         <DropdownMenu>
@@ -82,9 +81,9 @@ const columns: ColumnDef<VoucherType>[] = [
 export default function VoucherTable() {
         const { data, isLoading, error } = useFetch<VoucherType[], ["voucher"]>({
     queryKey: ["voucher"],
-    url: "/api/voucher/all-vouchers",
+    url: "/api/admin/voucher/vouchers",
    });
-    const [voucherData,setVoucherData]=useState<VoucherType[]>([])
+    const [_voucherData,setVoucherData]=useState<VoucherType[]>([])
     useEffect(()=>{if(data?.data)setVoucherData(data?.data)},[data])
   const [rowSelection, setRowSelection] = useState({});
   const [pagination, setPagination] = useState({

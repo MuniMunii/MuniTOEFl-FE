@@ -30,7 +30,7 @@ export default function QuizSessionPage() {
     queryKey: ["quiz-session", type, testId],
     queryFn: async () => {
       const res = await apiClient.get(
-        `/api/test-attempt/all-question/${type}/${testId}`,
+        `/api/test-attempt/test/${testId}/questions?type=${type}`,
       );
       return res.data.data as OptimisticQuizUI[];
     },
@@ -39,7 +39,7 @@ export default function QuizSessionPage() {
     queryKey: ["saved-answer", type, testId],
     queryFn: async () => {
       const res = await apiClient.get(
-        `/api/test-attempt/saved-answer-question/${testId}`,
+        `/api/test-attempt/tests/${testId}/active-session`,
       );
       return res.data.data as SavedAnswerType;
     },

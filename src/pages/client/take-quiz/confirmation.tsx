@@ -19,7 +19,7 @@ export default function ConfirmationTakeQuizPage(){
     useEffect(()=>{console.log(testSession)},[testSession])
     const navigate=useNavigate()
     const createTestMutate=useMutate<any,{type:string,testId:string}>({
-        url:`/api/test-attempt/create-attempt-test/${type}/${testId}`,
+        url:`/api/test-attempt/test/${testId}/attempts`,
         method:'POST',
         options:{
             onSuccess:()=>{

@@ -12,20 +12,25 @@ import { useMutate } from "@/hooks/useMutation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import ChoicesList from "./choices-list";
+import { useMutation } from "@tanstack/react-query";
+import { apiClient } from "@/api/axiosClient";
+import { toast } from "sonner";
 
 export default function QuestionBlock({question,questionLoading,questionError,order}:{order:Number,question:QuestionType,questionLoading:boolean,questionError:Error|null}){
     const {cursorId,qTitle,qDescription,testId,_id,choices}=question
     const [title,setTitle]=useState(qTitle)
     const [extend,setExtend]=useState<boolean>(false)
     const {addChoices,editQuestionTitle,deleteQuestionFromState,selectCorrectAnswer}=addQuestionStore()
-    const deleteQuestionMutate=useMutate<any,{testId:string,_id:string}>({
-        url:`/api/test/question/${testId}/${_id}`,
-        method:'DELETE',
-        options:{
+    const deleteQuestionMutate=useMutation<any,Error,{testId:string,_id:string}>({
+        mutationFn:async({testId,_id})=>{
+            const questionId=_id;
+            const res=await apiClient.delete(`/api/admin/test/metadata/${testId}/questions/${questionId}`)
+            return res.data
+        },
             onSuccess:()=>{
+                toast('Question Deleted');
                 deleteQuestionFromState(cursorId)
             }
-        }
         }
     )
     if(questionLoading){return (

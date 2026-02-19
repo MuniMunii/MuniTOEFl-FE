@@ -17,7 +17,7 @@ export default function ResultPage(){
     const {data:result}=useQuery({
         queryKey:['result-data',attemptId],
         queryFn:async ()=>{
-            const res=await apiClient.get(`/api/test-attempt/result/${attemptId}`)
+            const res=await apiClient.get(`/api/test-attempt/results/${attemptId}`)
             return res.data.data as ResultProps[]
         }
     })

@@ -60,7 +60,7 @@ export default function DialogFormAddCourse(){
   >({
     method: "POST",
     isHeaderJSON: true,
-    url: "/api/test/create-test",
+    url: "/api/admin/test/create-test",
     options: {
       onSuccess: (data) => {
         toast(data.message);

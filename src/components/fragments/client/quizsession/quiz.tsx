@@ -88,8 +88,8 @@ export default function Quiz({
     },
   });
   const submitTestMutation=useMutate<any,{testId:string},any>({
-url:`/api/test-attempt/submit-test/${testId}`,
-method:'PATCH',
+url:`/api/test-attempt/test/${testId}/submit`,
+method:'POST',
 options:{
   onSuccess:(data)=>{
     console.log(data.data)
