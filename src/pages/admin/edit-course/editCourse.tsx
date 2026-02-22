@@ -48,7 +48,7 @@ useBeforeUnload(isDirty)
     queryKey: ["question-test", metaData?._id],
     queryFn: async () => {
       const res = await apiClient.get(
-        `/api/admin/test/questions/${testId}`,
+        `/api/admin/test/metadata/${testId}/questions`,
       );
       return (res.data.data as QuestionType[]) ?? [];
     },

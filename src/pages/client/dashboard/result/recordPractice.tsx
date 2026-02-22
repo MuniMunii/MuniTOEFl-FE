@@ -1,26 +1,48 @@
 import { apiClient } from "@/api/axiosClient";
 import { AppSidebar } from "@/components/fragments/client/dashboard/Sidebar/Sidebar";
+import DynamicPagination from "@/components/fragments/dynamicPagination";
 import { Button } from "@/components/ui/button";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { parseDateToID } from "@/lib/parseDateToID";
 import { useQuery } from "@tanstack/react-query";
 import { FolderHeart } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-interface ResultProps{}
-interface ResultMetaProps{}
+interface ResultProps {
+_id:string,
+expiredAt:string,
+expiresAt:string,
+testId:string,
+userId:string,
+submittedAt?:string,
+status:'submitted'|'expired'|'in_progress'
+}
+interface ResultMetaProps {
+    info:{_id:string,title:string,titleSlug:string,type:"all" | "listening" | "reading" | "speaking" | "writing"}[],
+    total:number
+}
 export default function RecordPracticePage() {
-  const [type,setType]=useState<'all'|'listening'|'reading'|'speaking'|'writing'>('all')
-  const navigate=useNavigate()
-  const { data:result } = useQuery({
-    queryKey: ["results",type],
-    enabled:!!type,
-    staleTime:60000,
+    const [currentPage,setCurrentPage]=useState(1)
+  const [type, setType] = useState<
+    "all" | "listening" | "reading" | "speaking" | "writing"
+  >("all");
+  const navigate = useNavigate();
+  const { data: result,isLoading } = useQuery({
+    queryKey: ["results", type],
+    enabled: !!type,
+    staleTime: 60000,
     queryFn: async () => {
       const res = await apiClient.get(`/api/test-attempt/results?type=${type}`);
-      console.log(res.data)
-      return {data:res.data.data as any[],meta:res.data.meta}
+      console.log(res.data);
+      return { data: res.data.data as ResultProps[], meta: res.data.meta as ResultMetaProps };
     },
   });
   return (
@@ -28,41 +50,59 @@ export default function RecordPracticePage() {
       <SidebarProvider>
         <AppSidebar />
         <div className="size-full min-h-screen bg-white p-4">
-            <div className="size-full min-h-max p-4 rounded-md flex-col flex gap-4">
-                <div className="flex gap-3 border-b border-b-gray-700 pb-4">
-                    <Button onClick={()=>setType('all')}>All</Button>
-                    <Button onClick={()=>setType('listening')}>Listening</Button>
-                    <Button onClick={()=>setType('reading')}>Reading</Button>
-                    <Button onClick={()=>setType('speaking')}>Speaking</Button>
-                    <Button onClick={()=>setType('writing')}>Writing</Button>
-                </div>
-                <div className="size-full flex-col flex gap-4">
-                    <div className="w-full h-fit p-4 flex justify-between items-center border-gray-400 border rounded-md shadow-sm">
-                        <div className="w-full max-w-[400px] flex flex-col gap-2 line-clamp-3 text-ellipsis">
-                            <h2 className="font-semibold text-2xl">Title</h2>
-                            <p className="uppercase text-xs text-slate-500">Writing</p>
-                        </div>
-                        <div className="flex flex-col gap-3 items-center">
-                            <Button onClick={()=>navigate(``)} variant={'secondary'}>Review</Button>
-                            <p className="text-xs text-slate-500">{parseDateToID(new Date())}</p>
-                        </div>
-                    </div>
-                {/* {result?.data.length===0||!result?.data?
-                <Empty className="self-center justify-self-center">
-                    <EmptyHeader>
-                        <EmptyMedia variant={'icon'}>
-                            <FolderHeart/>
-                        </EmptyMedia>
-                        <EmptyTitle>No practices record</EmptyTitle>
-                        <EmptyDescription>You still not taking any lesson yet, go take lesson</EmptyDescription>
-                        <EmptyContent>
-                            <Button onClick={()=>navigate('/dashboard/lesson')}>Take a lesson</Button>
-                        </EmptyContent>
-                    </EmptyHeader>
-                </Empty>:
-                <div></div>} */}
-                </div>
+          <div className="size-full min-h-max p-4 rounded-md flex-col flex gap-4">
+            <div className="flex gap-3 border-b border-b-gray-700 pb-4">
+              <Button onClick={() => setType("all")}>All</Button>
+              <Button onClick={() => setType("listening")}>Listening</Button>
+              <Button onClick={() => setType("reading")}>Reading</Button>
+              <Button onClick={() => setType("speaking")}>Speaking</Button>
+              <Button onClick={() => setType("writing")}>Writing</Button>
             </div>
+            <div className="size-full flex-col flex gap-4">
+              {result?.data.length === 0 || !result?.data ? (
+                <Empty className="self-center justify-self-center">
+                  <EmptyHeader>
+                    <EmptyMedia variant={"icon"}>
+                      <FolderHeart />
+                    </EmptyMedia>
+                    <EmptyTitle>No practices record</EmptyTitle>
+                    <EmptyDescription>
+                      You still not taking any lesson yet, go take lesson
+                    </EmptyDescription>
+                    <EmptyContent>
+                      <Button onClick={() => navigate("/dashboard/lesson")}>
+                        Take a lesson
+                      </Button>
+                    </EmptyContent>
+                  </EmptyHeader>
+                </Empty>
+              ) : result.data.sort((a,b)=>new Date(b.expiresAt).getTime()-new Date(a.expiresAt).getTime()).map((v,i)=>{
+                const type=result.meta.info.find(t=>t._id===v.testId)
+                return (
+                <div key={v._id+i} className="w-full h-fit p-4 flex justify-between items-center border-gray-400 border rounded-md shadow-sm">
+                  <div className="w-full max-w-[400px] flex flex-col gap-2 line-clamp-3 text-ellipsis">
+                    <h2 className="font-semibold text-2xl">{type?.title}</h2>
+                    <p className="uppercase text-xs text-slate-500">{type?.type}</p>
+                  </div>
+                  <div className="flex flex-col gap-3 items-center">
+                    {v.status==='submitted'&&<Button onClick={() => navigate(`/result/${v._id}`)} variant={"secondary"}>
+                      Review
+                    </Button>}
+                    {v.status==='in_progress'&& <Button onClick={() => navigate(`/quiz-session/${type?.type}/${v.testId}`)} variant={"secondary"}>
+                      Continue
+                    </Button>}
+                    {v.status==='expired' && <Button variant={"secondary"}>
+                      Expired
+                    </Button>}
+                    <p className="text-xs text-slate-500">
+                      {v.status==='in_progress'?'In progress':parseDateToID(new Date(v.submittedAt??v.expiredAt))}
+                    </p>
+                  </div>
+                </div>
+              )})}
+              {(result?.data.length!==0&&!isLoading)&&<DynamicPagination currentPage={currentPage} setCurrentPage={setCurrentPage} pageSize={6} total={result?.meta.total??0}/>}
+            </div>
+          </div>
         </div>
       </SidebarProvider>
     </>

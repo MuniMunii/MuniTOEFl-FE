@@ -6,6 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useTimer } from "@/hooks/useTimer";
 import type { AnswerChoicesTestType } from "@/schemas/test-attempt";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
@@ -22,6 +23,7 @@ interface SavedAnswerType {
     choiceId: string;
     saved: boolean;
   }[];
+  expiresAt:string
 }
 export default function QuizSessionPage() {
   const { type, testId } = useParams();
@@ -66,6 +68,7 @@ export default function QuizSessionPage() {
     localStorage.setItem("order", parseNum);
     setOrder(num);
   }
+    const {seconds,minutes,isExpired}=useTimer(savedAnswer?.expiresAt)
   useEffect(() => {
     if (quizData.length === 0) {
       localStorage.setItem("order", "1");
@@ -77,7 +80,7 @@ export default function QuizSessionPage() {
   // useEffect(() => console.log(quizOrder), [quizOrder]);
   return (
     <div className="size-full min-h-screen">
-      <div className="w-full h-12 py-2 px-1 flex items-center bg-gray-800"></div>
+      <div className="w-full h-12 py-2 px-1 flex items-center bg-gray-800">{isExpired?'expired':`${minutes}:${seconds}`}</div>
       <Popover>
         <PopoverTrigger asChild>
           <Button type="button">Question</Button>

@@ -12,7 +12,7 @@ export default function ConfirmationTakeQuizPage(){
     const {data:testSession}=useQuery({
         queryKey:['voucher-validation','test-session',type,testId],
      queryFn:async()=>{
-        const res=await apiClient.get(`/api/voucher/voucher-session/${type}/${testId}`)
+        const res=await apiClient.get(`/api/voucher/vouchers/${type}/metadata/${testId}/active-session?type=${type}`)
         return res.data
     }
     })

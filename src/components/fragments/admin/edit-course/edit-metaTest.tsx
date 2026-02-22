@@ -30,7 +30,7 @@ export default function EditMetaTest({
 }) {
   const updateMeta = useMutation({
     mutationFn:async ({ prop, value }: { prop: string; value: any }) =>{
-      const res=await apiClient.patch(`/api/admin/test/metadata/${metaData!._id}/${prop}`, {
+      const res=await apiClient.patch(`/api/admin/test/metadata/${metaData!._id}/${prop}/save`, {
         value,
       })
       const message=await res.data.message
